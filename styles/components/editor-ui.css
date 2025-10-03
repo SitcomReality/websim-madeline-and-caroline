@@ -108,6 +108,68 @@
     font-family: var(--font-primary), 'Courier New', monospace;
 }
 
+.editor-property .recent-colors {
+    display: flex;
+    gap: 4px;
+    margin-top: 6px;
+}
+
+.editor-property .color-swatch {
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--text-secondary);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+}
+
+.editor-property .color-swatch:hover {
+    transform: scale(1.1);
+    border-color: var(--color-primary);
+}
+
+.property-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.property-actions button {
+    flex-grow: 1;
+    padding: 8px;
+    background: var(--color-secondary);
+    color: var(--bg-darker);
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-primary), 'Courier New', monospace;
+    font-weight: 700;
+    border-radius: 2px;
+    transition: all var(--transition-fast);
+}
+
+.property-actions button:hover {
+    background: var(--color-primary);
+    color: var(--bg-darker);
+    box-shadow: var(--glow-primary);
+}
+
+.property-actions button:disabled {
+    background: #444;
+    color: #888;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.property-actions .delete-btn {
+    background: var(--color-danger);
+    color: var(--text-primary);
+}
+
+.property-actions .delete-btn:hover {
+    background: #ff6a6a;
+}
+
 .editor-property button {
     width: 100%;
     padding: 8px;

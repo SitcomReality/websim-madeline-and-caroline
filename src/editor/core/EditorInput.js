@@ -78,6 +78,14 @@ export default class EditorInput {
     }
 
     handleKeyDown(e) {
+        // Prevent shortcuts if an input field is focused
+        const activeEl = document.activeElement;
+        const isInputFocused = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'SELECT');
+
+        if (isInputFocused && (e.key === 'Delete' || e.key === 'Backspace')) {
+            return; // Don't delete entity, allow typing in input
+        }
+
         if (e.ctrlKey || e.metaKey) {
             if (e.key === 'z') {
                 e.preventDefault();

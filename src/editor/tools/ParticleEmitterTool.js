@@ -15,7 +15,8 @@ export default class ParticleEmitterTool extends Tool {
             angle: -90, // Default up
             cone: 20,
             burstMode: false,
-            burstInterval: 2
+            burstInterval: 2,
+            burstSize: 10
         };
         this.editorManager.addEntity(entity);
     }

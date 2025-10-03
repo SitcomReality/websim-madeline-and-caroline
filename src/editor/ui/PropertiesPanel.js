@@ -1,9 +1,11 @@
 import UIComponent from '../../ui/UIComponent.js';
+import { createRecentColors, setRecentColor } from 'game/utils/ui';
 
 export default class PropertiesPanel extends UIComponent {
     constructor(editorUI) {
         super();
         this.editorUI = editorUI;
+        this.clipboard = null;
     }
 
     init() {
@@ -50,6 +52,7 @@ export default class PropertiesPanel extends UIComponent {
             properties.push({ label: 'Burst Mode', key: 'burstMode', type: 'checkbox' });
             if (entity.burstMode) {
                 properties.push({ label: 'Burst Interval (s)', key: 'burstInterval', type: 'number', step: 0.1 });
+                properties.push({ label: 'Burst Size', key: 'burstSize', type: 'number', step: 1 });
             }
         } else if (entity.type === 'ramp') {
             properties.push({ label: 'Angle', key: 'angle', type: 'number', step: 1 });
@@ -65,13 +68,13 @@ export default class PropertiesPanel extends UIComponent {
 
             if (prop.type === 'select') {
                 const select = document.createElement('select');
-                select.value = entity[prop.key] || prop.options[0];
                 prop.options.forEach(opt => {
                     const option = document.createElement('option');
                     option.value = opt;
                     option.textContent = opt;
                     select.appendChild(option);
                 });
+                select.value = entity[prop.key] || prop.options[0];
                 select.onchange = (e) => this.updateEntityProperty(entity, prop.key, e.target.value);
                 div.appendChild(select);
             } else if (prop.type === 'checkbox') {
@@ -86,23 +89,49 @@ export default class PropertiesPanel extends UIComponent {
                 if (prop.step) input.step = prop.step;
                 input.value = entity[prop.key] !== undefined ? entity[prop.key] : (prop.type === 'number' ? 0 : '');
                 input.onchange = (e) => {
-                    const value = prop.type === 'number' ? parseFloat(e.target.value) : e.target.value;
+                    let value = e.target.value;
+                    if (prop.type === 'number') {
+                        value = parseFloat(e.target.value);
+                    } else if (prop.type === 'color') {
+                        setRecentColor(value);
+                    }
                     this.updateEntityProperty(entity, prop.key, value);
                 };
                 div.appendChild(input);
+
+                if (prop.type === 'color') {
+                    div.appendChild(createRecentColors(color => {
+                        input.value = color;
+                        this.updateEntityProperty(entity, prop.key, color);
+                    }));
+                }
             }
 
             this.element.appendChild(div);
         });
+        
+        // --- Action Buttons ---
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'property-actions';
+
+        const copyBtn = document.createElement('button');
+        copyBtn.textContent = 'Copy Props';
+        copyBtn.onclick = () => this.copyProperties(entity);
+        actionsDiv.appendChild(copyBtn);
+
+        const pasteBtn = document.createElement('button');
+        pasteBtn.textContent = 'Paste Props';
+        pasteBtn.disabled = !this.clipboard || this.clipboard.type !== entity.type;
+        pasteBtn.onclick = () => this.pasteProperties(entity);
+        actionsDiv.appendChild(pasteBtn);
 
         const deleteBtn = document.createElement('button');
         deleteBtn.textContent = 'Delete Entity';
+        deleteBtn.className = 'delete-btn';
         deleteBtn.onclick = () => this.editorUI.editorManager.deleteSelected();
-
-        const btnDiv = document.createElement('div');
-        btnDiv.className = 'editor-property';
-        btnDiv.appendChild(deleteBtn);
-        this.element.appendChild(btnDiv);
+        actionsDiv.appendChild(deleteBtn);
+        
+        this.element.appendChild(actionsDiv);
     }
 
     renderLevelSettings(settings) {
@@ -126,10 +155,25 @@ export default class PropertiesPanel extends UIComponent {
             input.type = prop.type;
             input.value = settings[prop.key];
             input.onchange = (e) => {
-                const value = prop.type === 'number' ? parseFloat(e.target.value) : e.target.value;
+                let value = e.target.value;
+                if (prop.type === 'number') {
+                    value = parseFloat(e.target.value);
+                } else if (prop.type === 'color') {
+                    setRecentColor(value);
+                }
                 settings[prop.key] = value;
+                if (prop.key === 'backgroundColor') {
+                    this.update(); // Redraw recent colors
+                }
             };
             div.appendChild(input);
+            
+            if (prop.type === 'color') {
+                div.appendChild(createRecentColors(color => {
+                    input.value = color;
+                    settings[prop.key] = color;
+                }));
+            }
 
             this.element.appendChild(div);
         });
@@ -137,6 +181,26 @@ export default class PropertiesPanel extends UIComponent {
 
     updateEntityProperty(entity, key, value) {
         const changes = { [key]: value };
+        this.editorUI.editorManager.state.updateEntity(entity, changes);
+        this.update();
+    }
+
+    copyProperties(entity) {
+        const excludedKeys = ['x', 'y', 'width', 'height'];
+        this.clipboard = { type: entity.type, props: {} };
+
+        for (const key in entity) {
+            if (!excludedKeys.includes(key) && Object.prototype.hasOwnProperty.call(entity, key)) {
+                this.clipboard.props[key] = entity[key];
+            }
+        }
+        this.update(); // Re-render to enable paste button
+    }
+
+    pasteProperties(entity) {
+        if (!this.clipboard || this.clipboard.type !== entity.type) return;
+
+        const changes = { ...this.clipboard.props };
         this.editorUI.editorManager.state.updateEntity(entity, changes);
         this.update();
     }

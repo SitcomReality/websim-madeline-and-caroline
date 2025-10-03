@@ -42,6 +42,11 @@ export default class EmitterController extends Component {
             angle: { min: angle - cone / 2, max: angle + cone / 2 }
         };
 
+        // For burst mode, override the particle count
+        if (this.burstMode) {
+            emitOptions.count = this.config.burstSize || 1;
+        }
+
         // Only override color if specified in config
         if (this.config.particleColor) {
              emitOptions.color = this.config.particleColor;
