@@ -1,5 +1,6 @@
 import InputManager from '../../../core/InputManager.js';
 import { GRAVITY } from '../../../config/constants.js';
+import MovementState, { MOVEMENT_STATES } from '../MovementState.js';
 
 export default class MovementHandler {
     constructor(playerController) {
