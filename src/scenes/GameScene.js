@@ -73,9 +73,7 @@ export default class GameScene extends Scene {
     update(deltaTime) {
         super.update(deltaTime); // Updates all game objects
         this.physicsSystem.update(this.gameObjects, deltaTime);
-        // Only provide platform colliders to the particle system so physical particles can collide with them
-        const platformColliders = this.gameObjects.filter(go => go.name === 'Platform');
-        this.particleSystem.update(deltaTime, platformColliders);
+        this.particleSystem.update(deltaTime, this.gameObjects);
         this.camera.update(deltaTime);
         // Update minimap render
         const playerColor = this.playerRef?.getComponent('SpriteRenderer')?.color || '#ffffff';
