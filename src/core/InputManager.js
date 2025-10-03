@@ -1,8 +1,15 @@
+import InputBuffer from '../systems/InputBuffer.js';
+
 class InputManager {
     constructor() {
         this.keys = new Set();
 
-        window.addEventListener('keydown', (e) => this.keys.add(e.code));
+        window.addEventListener('keydown', (e) => {
+            if (!this.keys.has(e.code)) {
+                this.keys.add(e.code);
+                InputBuffer.handleKeyDown(e.code);
+            }
+        });
         window.addEventListener('keyup', (e) => this.keys.delete(e.code));
     }
 

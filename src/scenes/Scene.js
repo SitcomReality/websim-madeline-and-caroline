@@ -6,6 +6,7 @@ export default class Scene {
 
     addGameObject(gameObject) {
         this.gameObjects.push(gameObject);
+        gameObject.scene = this;
     }
 
     init() {}
@@ -14,6 +15,9 @@ export default class Scene {
         for(const go of this.gameObjects) {
             go.update(deltaTime);
         }
+        
+        // Remove destroyed objects
+        this.gameObjects = this.gameObjects.filter(go => !go._destroyed);
     }
 
     draw(ctx) {

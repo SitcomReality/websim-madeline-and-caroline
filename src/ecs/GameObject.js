@@ -2,7 +2,7 @@ export default class GameObject {
     constructor(name = 'GameObject') {
         this.name = name;
         this.components = [];
-        this.transform = null; // Quick access to transform
+        this.transform = null;
     }
 
     addComponent(component) {
@@ -14,7 +14,6 @@ export default class GameObject {
     }
 
     getComponent(componentClass) {
-        // Handle both string and class references
         const className = typeof componentClass === 'string' 
             ? componentClass 
             : componentClass.name;
@@ -30,10 +29,16 @@ export default class GameObject {
     }
 
     draw(ctx) {
-         for (const component of this.components) {
+        for (const component of this.components) {
             if (component.draw) {
                 component.draw(ctx);
             }
         }
     }
+    
+    destroy() {
+        // Mark for removal
+        this._destroyed = true;
+    }
 }
+
