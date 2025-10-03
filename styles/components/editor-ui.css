@@ -75,7 +75,7 @@
     box-shadow: var(--glow-primary);
     padding: 15px;
     width: 250px;
-    max-height: 80vh;
+    max-height: 70vh;
     overflow-y: auto;
     font-family: var(--font-primary), 'Courier New', monospace;
     font-size: 0.9rem;
