@@ -61,10 +61,14 @@ export default class GameScene extends Scene {
         this.minimap.init();
         this.playerRef = player;
 
+        // Apply level gravity to player if specified
         if (this.level?.settings?.gravity != null) {
             const phys = player.getComponent('Physics');
             if (phys) phys.gravity = this.level.settings.gravity;
         }
+        
+        // Store level gravity for particle system
+        this.levelGravity = this.level?.settings?.gravity || GRAVITY;
 
         if (this.level && Array.isArray(this.level.entities)) {
             this.level.entities.forEach(e => {
@@ -119,7 +123,13 @@ export default class GameScene extends Scene {
     update(deltaTime) {
         super.update(deltaTime); // Updates all game objects
         this.physicsSystem.update(this.gameObjects, deltaTime);
-        this.particleSystem.update(deltaTime, this.gameObjects);
+        
+        // Get platform colliders for particle collision
+        const platformColliders = this.gameObjects.filter(go => 
+            go.name === 'Platform' || go.name === 'Ramp'
+        );
+        this.particleSystem.update(deltaTime, platformColliders);
+        
         this.camera.update(deltaTime);
         // Instant death if player leaves map bounds
         if (!this.ended && this.playerRef?.transform) {

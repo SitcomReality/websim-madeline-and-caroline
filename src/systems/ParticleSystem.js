@@ -79,15 +79,15 @@ export default class ParticleSystem {
         
         // Gasoline spray emitter
         const gasolineSpray = new ParticleEmitter(this.manager, PhysicalParticle, {
-            count: 2,
+            count: 3,
             lifetime: { min: 2.0, max: 4.0 },
-            speed: { min: 200, max: 250 },
-            startSize: { min: 2, max: 4 },
-            endSize: 1,
-            startColor: [200, 180, 220, 0.8],
-            endColor: [150, 120, 170, 0.5],
-            bounciness: 0.2,
-            friction: 0.9,
+            speed: { min: 150, max: 200 },
+            startSize: { min: 3, max: 5 },
+            endSize: 2,
+            startColor: [200, 180, 220, 0.9],
+            endColor: [150, 120, 170, 0.6],
+            bounciness: 0.3,
+            friction: 0.85,
             ay: 500 // Gravity
         });
         this.emitters.set('gasoline_spray', gasolineSpray);

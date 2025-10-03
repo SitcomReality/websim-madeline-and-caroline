@@ -14,9 +14,9 @@ export default class PhysicalParticle extends Particle {
         this.bounciness = options.bounciness !== undefined ? options.bounciness : 0.5;
         this.friction = options.friction !== undefined ? options.friction : 0.98;
         
-        // Store initial position
-        this.prevPosition.x = this.position.x;
-        this.prevPosition.y = this.position.y;
+        // Store initial position properly
+        this.prevPosition.x = options.x;
+        this.prevPosition.y = options.y;
 
         // Physical particles are affected by gravity by default
         if (options.ay === undefined) {
@@ -46,57 +46,72 @@ export default class PhysicalParticle extends Particle {
             const v = this.velocity;
 
             if (collider.name === 'Platform') {
-                // Check if particle is within horizontal bounds
-                if (p.x >= colTransform.position.x - 2 &&
-                    p.x <= colTransform.position.x + colTransform.size.x + 2) {
-                    
-                    const platformTop = colTransform.position.y;
-                    const platformBottom = colTransform.position.y + colTransform.size.y;
-                    
-                    // Check if particle crossed through platform from above
-                    if (this.prevPosition.y <= platformTop && p.y > platformTop && p.y < platformBottom + 10) {
-                        // Collision! Place particle on top of platform
-                        p.y = platformTop;
-                        v.y *= -this.bounciness;
-                        v.x *= this.friction;
-                        onSurface = true;
-                        
-                        // If bounce is small, stop bouncing
-                        if (Math.abs(v.y) < 10) {
-                            v.y = 0;
-                            this.acceleration.y = 0;
+                const platformTop = colTransform.position.y;
+                const platformBottom = colTransform.position.y + colTransform.size.y;
+                const platformLeft = colTransform.position.x;
+                const platformRight = colTransform.position.x + colTransform.size.x;
+                
+                // Check if particle is within or near horizontal bounds (with margin)
+                if (p.x >= platformLeft - 5 && p.x <= platformRight + 5) {
+                    // Check if particle crossed through platform or is already inside/below it
+                    // More lenient check - if particle is anywhere near the platform vertically
+                    if (p.y >= platformTop - 5 && p.y <= platformBottom + 20) {
+                        // Check if coming from above
+                        if (this.prevPosition.y < platformTop + 5) {
+                            // Collision! Place particle on top of platform
+                            p.y = platformTop;
+                            v.y *= -this.bounciness;
+                            v.x *= this.friction;
+                            onSurface = true;
+                            
+                            // If bounce is small, stop bouncing
+                            if (Math.abs(v.y) < 20) {
+                                v.y = 0;
+                                this.acceleration.y = 0;
+                            }
+                            break; // Found collision, stop checking other platforms
                         }
                     }
                 }
             } else if (collider.name === 'Ramp') {
-                // Simple bounding box check first
-                if (
-                    p.x >= colTransform.position.x &&
-                    p.x <= colTransform.position.x + colTransform.size.x &&
-                    p.y >= colTransform.position.y &&
-                    p.y <= colTransform.position.y + colTransform.size.y
-                ) {
-                    const relativeX = p.x - colTransform.position.x;
-                    // Assuming ramp slopes up from left to right
-                    const rampSurfaceY = colTransform.position.y + colTransform.size.y * (1 - (relativeX / colTransform.size.x));
+                const rampLeft = colTransform.position.x;
+                const rampRight = colTransform.position.x + colTransform.size.x;
+                const rampTop = colTransform.position.y;
+                const rampBottom = colTransform.position.y + colTransform.size.y;
+                
+                // Check if within ramp bounds
+                if (p.x >= rampLeft - 5 && p.x <= rampRight + 5 &&
+                    p.y >= rampTop - 5 && p.y <= rampBottom + 20) {
                     
-                    if (p.y > rampSurfaceY) {
+                    const relativeX = Math.max(0, Math.min(colTransform.size.x, p.x - rampLeft));
+                    // Ramp slopes up from left to right
+                    const rampSurfaceY = rampBottom - (relativeX / colTransform.size.x) * colTransform.size.y;
+                    
+                    if (p.y >= rampSurfaceY - 5 && this.prevPosition.y < rampSurfaceY) {
                         p.y = rampSurfaceY;
                         v.y *= -this.bounciness * 0.5;
                         v.x *= this.friction;
                         onSurface = true;
+                        
+                        if (Math.abs(v.y) < 20) {
+                            v.y = 0;
+                            this.acceleration.y = 0;
+                        }
+                        break;
                     }
                 }
             }
         }
         
         // If on a surface and moving slowly, come to a rest
-        if (onSurface && Math.abs(v.y) < 5) {
-            v.y = 0;
-            this.acceleration.y = 0;
-        }
-        if (onSurface && Math.abs(v.x) < 1) {
-            v.x = 0;
+        if (onSurface) {
+            if (Math.abs(v.y) < 10) {
+                v.y = 0;
+                this.acceleration.y = 0;
+            }
+            if (Math.abs(v.x) < 2) {
+                v.x = 0;
+            }
         }
     }
 }
