@@ -1,209 +1,31 @@
 import ParticleManager from 'game/particles/ParticleManager';
-import ParticleEmitter from 'game/particles/ParticleEmitter';
-import AestheticParticle from 'game/particles/AestheticParticle';
-import PhysicalParticle from 'game/particles/PhysicalParticle';
+import EmitterRegistry from '../particles/EmitterRegistry.js';
+import { registerDefaultEmitters } from '../particles/presets/index.js';
+import { hexToRgbA } from '../particles/utils/color.js';
 
 export default class ParticleSystem {
     constructor() {
         this.manager = new ParticleManager();
-        this.emitters = new Map();
-        this.registerDefaultEmitters();
-    }
-
-    registerDefaultEmitters() {
-        // Jump dust emitter
-        const jumpDustEmitter = new ParticleEmitter(this.manager, AestheticParticle, {
-            count: 10,
-            angle: { min: -120, max: -60 },
-            speed: { min: 20, max: 80 },
-            lifetime: { min: 0.3, max: 0.7 },
-            startSize: { min: 2, max: 5 },
-            endSize: 0,
-            startColor: [200, 200, 200, 0.8],
-            endColor: [200, 200, 200, 0],
-            ay: 50 // slight gravity effect
-        });
-        this.emitters.set('jump_dust', jumpDustEmitter);
-        
-        // Character switch emitter
-        const switchEmitter = new ParticleEmitter(this.manager, AestheticParticle, {
-            count: 30,
-            angle: { min: 0, max: 360 },
-            speed: { min: 100, max: 250 },
-            lifetime: { min: 0.4, max: 0.8 },
-            startSize: { min: 3, max: 6 },
-            endSize: 0,
-            startColor: [255, 255, 255, 1], // Will be overridden
-            endColor: [255, 255, 255, 0],
-        });
-        this.emitters.set('character_switch', switchEmitter);
-
-        // Madeline dash emitter
-        const madelineDash = new ParticleEmitter(this.manager, AestheticParticle, {
-            count: 20,
-            angle: { min: -10, max: 10 },
-            speed: { min: 20, max: 50 },
-            lifetime: { min: 0.3, max: 0.6 },
-            startSize: { min: 4, max: 8 },
-            endSize: 0,
-            startColor: [255, 71, 171, 0.9],
-            endColor: [255, 71, 171, 0]
-        });
-        this.emitters.set('madeline_dash', madelineDash);
-
-        // Caroline dash emitter
-        const carolineDash = new ParticleEmitter(this.manager, AestheticParticle, {
-            count: 15,
-            angle: { min: -5, max: 5 },
-            speed: { min: 50, max: 100 },
-            lifetime: { min: 0.2, max: 0.4 },
-            startSize: { min: 2, max: 5 },
-            endSize: 0,
-            startColor: [71, 255, 255, 1],
-            endColor: [71, 255, 255, 0]
-        });
-        this.emitters.set('caroline_dash', carolineDash);
-        
-        // Fuel can collect emitter
-        const fuelCollect = new ParticleEmitter(this.manager, AestheticParticle, {
-            count: 25,
-            angle: { min: 0, max: 360 },
-            speed: { min: 80, max: 200 },
-            lifetime: { min: 0.3, max: 0.7 },
-            startSize: { min: 2, max: 5 },
-            endSize: 0,
-            startColor: [255, 255, 71, 1],
-            endColor: [255, 255, 71, 0]
-        });
-        this.emitters.set('fuel_collect', fuelCollect);
-        
-        // Gasoline spray emitter
-        const gasolineSpray = new ParticleEmitter(this.manager, PhysicalParticle, {
-            count: 3,
-            lifetime: { min: 2.0, max: 4.0 },
-            speed: { min: 150, max: 200 },
-            startSize: { min: 3, max: 5 },
-            endSize: 2,
-            startColor: [200, 180, 220, 0.9],
-            endColor: [150, 120, 170, 0.6],
-            bounciness: 0.3,
-            friction: 0.85,
-            ay: 500 // Gravity
-        });
-        this.emitters.set('gasoline_spray', gasolineSpray);
-
-        // Generic emitters for level objects
-        const magicSparkle = new ParticleEmitter(this.manager, AestheticParticle, {
-            count: 1,
-            lifetime: { min: 0.5, max: 1.5 },
-            speed: { min: 10, max: 30 },
-            angle: {min: -120, max: -60},
-            startSize: { min: 2, max: 4 },
-            endSize: 0
-        });
-        this.emitters.set('magic_sparkle', magicSparkle);
-
-        const debris = new ParticleEmitter(this.manager, PhysicalParticle, {
-            count: 1,
-            lifetime: { min: 1, max: 2 },
-            speed: { min: 10, max: 30 },
-            angle: {min: -120, max: -60},
-            startSize: { min: 2, max: 4 },
-            endSize: 1,
-            bounciness: 0.3,
-            friction: 0.95,
-            ay: 400
-        });
-        this.emitters.set('debris', debris);
-
-        // New emitters
-        const fireSparks = new ParticleEmitter(this.manager, AestheticParticle, {
-            count: 1,
-            lifetime: { min: 0.3, max: 0.8 },
-            speed: { min: 40, max: 120 },
-            angle: { min: -120, max: -60 },
-            startSize: { min: 1, max: 3 },
-            endSize: 0,
-            startColor: [255, 180, 50, 1],
-            endColor: [255, 80, 0, 0],
-        });
-        this.emitters.set('fire_sparks', fireSparks);
-
-        const smoke = new ParticleEmitter(this.manager, AestheticParticle, {
-            count: 1,
-            lifetime: { min: 1.5, max: 3.0 },
-            speed: { min: 10, max: 30 },
-            angle: {min: -100, max: -80},
-            startSize: { min: 5, max: 10 },
-            endSize: { min: 15, max: 25 },
-            startColor: [50, 50, 50, 0.7],
-            endColor: [50, 50, 50, 0],
-            ay: -20 // smoke rises
-        });
-        this.emitters.set('smoke', smoke);
-
-        // Player death burst (color-matched)
-        const playerDeathBurst = new ParticleEmitter(this.manager, AestheticParticle, {
-            count: 180,
-            angle: { min: 0, max: 360 },
-            speed: { min: 150, max: 400 },
-            lifetime: { min: 0.6, max: 1.2 },
-            startSize: { min: 1, max: 3 },
-            endSize: 0
-        });
-        this.emitters.set('player_death_burst', playerDeathBurst);
+        this.registry = new EmitterRegistry(this.manager);
+        registerDefaultEmitters(this.registry);
     }
 
     getAvailableEmitterTypes() {
-        // Exclude player-specific or internal emitters from the editor UI
-        return Array.from(this.emitters.keys()).filter(name => ![
-            'character_switch',
-            'madeline_dash',
-            'caroline_dash',
-            'player_death_burst',
-            'generic_aesthetic', // old ones
-            'generic_physical'
-        ].includes(name));
+        return this.registry.getAvailableEmitterTypes();
     }
 
     emit(emitterName, options) {
-        const emitter = this.emitters.get(emitterName);
-        if (emitter) {
-            if (options.color) {
-                // Special handling for color override (e.g., character switch)
-                const tempOptions = { ...options };
-                const startColor = this.hexToRgbA(options.color);
-                const endColor = [...startColor];
-                endColor[3] = 0;
-                tempOptions.startColor = startColor;
-                tempOptions.endColor = endColor;
-                emitter.emit(tempOptions);
-            } else {
-                emitter.emit(options);
-            }
+        const emitter = this.registry.get(emitterName);
+        if (!emitter) { console.warn(`Particle emitter "${emitterName}" not found.`); return; }
+        if (options?.color) {
+            const startColor = hexToRgbA(options.color);
+            const endColor = [...startColor]; endColor[3] = 0;
+            emitter.emit({ ...options, startColor, endColor });
         } else {
-            console.warn(`Particle emitter "${emitterName}" not found.`);
+            emitter.emit(options);
         }
     }
 
-    update(deltaTime, colliders = []) {
-        this.manager.update(deltaTime, colliders);
-    }
-
-    draw(ctx) {
-        this.manager.draw(ctx);
-    }
-    
-    hexToRgbA(hex) {
-        let c;
-        if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-            c = hex.substring(1).split('');
-            if (c.length == 3) {
-                c = [c[0], c[0], c[1], c[1], c[2], c[2]];
-            }
-            c = '0x' + c.join('');
-            return [(c >> 16) & 255, (c >> 8) & 255, c & 255, 1];
-        }
-        throw new Error('Bad Hex');
-    }
+    update(deltaTime, colliders = []) { this.manager.update(deltaTime, colliders); }
+    draw(ctx) { this.manager.draw(ctx); }
 }
