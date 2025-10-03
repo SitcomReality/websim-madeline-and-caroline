@@ -1,0 +1,83 @@
+/* Splash screen styles */
+#splash-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 10, 10, 0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+    transition: opacity var(--transition-slow);
+}
+
+#splash-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#splash-screen h1 {
+    font-size: 4rem;
+    margin: 0;
+    color: var(--color-primary);
+    text-shadow: 2px 2px 0px var(--color-secondary);
+}
+
+#splash-screen h2 {
+    font-size: 2rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+}
+
+#splash-screen h3 {
+    font-size: 1.5rem;
+    color: var(--color-accent);
+    text-shadow: 1px 1px 0px var(--color-danger);
+    margin-bottom: 3rem;
+    max-width: 80%;
+}
+
+/* Splash screen buttons */
+.splash-button {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.5rem;
+    padding: 1rem 2rem;
+    background-color: var(--text-primary);
+    color: var(--bg-darker);
+    border: 2px solid var(--bg-darker);
+    cursor: pointer;
+    transition: all var(--transition-medium);
+    box-shadow: 5px 5px 0px var(--color-primary);
+}
+
+.splash-button:hover {
+    background-color: var(--color-primary);
+    color: var(--text-primary);
+    box-shadow: 5px 5px 0px var(--color-secondary);
+    transform: translate(-2px, -2px);
+}
+
+#map-editor-btn {
+    box-shadow: 5px 5px 0px var(--color-secondary);
+    margin-top: 1rem;
+}
+
+#map-editor-btn:hover {
+    background-color: var(--color-secondary);
+    box-shadow: 5px 5px 0px var(--color-primary);
+}
+
+#load-map-btn {
+    box-shadow: 5px 5px 0px var(--color-accent);
+    margin-top: 1rem;
+}
+
+#load-map-btn:hover {
+    background-color: var(--color-accent);
+    color: var(--bg-darker);
+    box-shadow: 5px 5px 0px var(--color-primary);
+}

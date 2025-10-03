@@ -1,0 +1,91 @@
+/* Modal styles */
+.save-load-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(10, 10, 20, 0.98);
+    border: 3px solid var(--color-primary);
+    padding: 20px;
+    width: 400px;
+    max-height: 70vh;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.save-load-modal.menu {
+    z-index: 200;
+    width: 300px;
+}
+
+.save-load-modal h2 {
+    margin-top: 0;
+    color: var(--color-primary);
+}
+
+.save-load-modal input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    background: #2a2a3a;
+    color: var(--text-primary);
+    border: 1px solid var(--color-secondary);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.level-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.level-list-item {
+    padding: 10px;
+    background: #2a2a3a;
+    border: 1px solid var(--color-secondary);
+    margin-bottom: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.level-list-item:hover {
+    background: var(--bg-panel-hover);
+}
+
+.level-list-item button {
+    padding: 5px 10px;
+    background: var(--color-danger);
+    color: var(--text-primary);
+    border: none;
+    cursor: pointer;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.level-list-item button:hover {
+    background: #ff6666;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.modal-actions button {
+    flex: 1;
+    padding: 10px;
+    background: var(--color-secondary);
+    color: var(--bg-darker);
+    border: none;
+    cursor: pointer;
+    font-family: 'Courier New', Courier, monospace;
+    transition: all var(--transition-fast);
+}
+
+.modal-actions button:hover {
+    background: var(--color-primary);
+    color: var(--text-primary);
+}
+

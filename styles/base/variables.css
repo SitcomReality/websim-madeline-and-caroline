@@ -1,0 +1,29 @@
+/* Cyberpunk theme variables */
+:root {
+    /* Primary colors */
+    --color-primary: #ff47ab;
+    --color-secondary: #47ffff;
+    --color-accent: #ffff47;
+    --color-danger: #ff4747;
+    
+    /* Background colors */
+    --bg-dark: #1a1a1a;
+    --bg-darker: #0a0a0a;
+    --bg-panel: rgba(20, 20, 30, 0.95);
+    --bg-panel-hover: #3a3a4a;
+    
+    /* Text colors */
+    --text-primary: #fafafa;
+    --text-secondary: #bbbbbb;
+    --text-highlight: var(--color-primary);
+    
+    /* Glow effects */
+    --glow-primary: 0 0 10px var(--color-primary);
+    --glow-secondary: 0 0 10px var(--color-secondary);
+    
+    /* Transitions */
+    --transition-fast: 0.1s ease-in-out;
+    --transition-medium: 0.2s ease-in-out;
+    --transition-slow: 0.5s ease-out;
+}
+

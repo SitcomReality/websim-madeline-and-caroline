@@ -1,0 +1,27 @@
+/* Main CSS file that imports all components */
+@import url('base/variables.css');
+@import url('base/reset.css');
+@import url('layout/game-container.css');
+@import url('components/splash-screen.css');
+@import url('components/editor-ui.css');
+@import url('components/modals.css');
+@import url('components/ui-elements.css');
+
+/* Any global utility classes */
+.hidden {
+    display: none !important;
+}
+
+/* Cyberpunk glow effects */
+.glow-primary {
+    box-shadow: var(--glow-primary);
+}
+
+.glow-secondary {
+    box-shadow: var(--glow-secondary);
+}
+
+/* Text glow effects */
+.text-glow {
+    text-shadow: 0 0 5px currentColor;
+}
