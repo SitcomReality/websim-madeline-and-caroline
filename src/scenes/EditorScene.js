@@ -3,6 +3,7 @@ import EditorManager from 'game/editor/core/EditorManager';
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from 'game/config/constants';
 import Camera from '../core/Camera.js';
 import EditorMinimap from 'game/editor/ui/EditorMinimap';
+import ParticleSystem from '../systems/ParticleSystem.js';
 
 export default class EditorScene extends Scene {
     init() {
@@ -15,11 +16,35 @@ export default class EditorScene extends Scene {
         this.editorManager.init();
         this.editorMinimap = new EditorMinimap(this);
         this.editorMinimap.init();
+        // Particle preview in editor
+        this.particleSystem = new ParticleSystem();
+        this._emitterTimers = new Map();
     }
 
     update(deltaTime) {
         this.editorManager.update(deltaTime);
         this.editorMinimap?.render();
+        // Drive editor particle emitters
+        for (const e of this.editorManager.state.entities) {
+            if (e.type !== 'particle_emitter') continue;
+            const t = this._emitterTimers.get(e) || 0;
+            const burst = e.burstMode;
+            const interval = burst ? (e.burstInterval || 2) : (1 / (e.emitRate || 10));
+            const nt = t + deltaTime;
+            if (nt >= interval) {
+                const angle = e.angle ?? -90, cone = e.cone ?? 20;
+                this.particleSystem.emit(e.emitterType || 'magic_sparkle', {
+                    x: e.x + e.width / 2,
+                    y: e.y + e.height / 2,
+                    color: e.particleColor || '#ffffff',
+                    angle: { min: angle - cone / 2, max: angle + cone / 2 }
+                });
+                this._emitterTimers.set(e, 0);
+            } else {
+                this._emitterTimers.set(e, nt);
+            }
+        }
+        this.particleSystem.update(deltaTime, []);
     }
 
     draw(ctx) {
@@ -35,6 +60,7 @@ export default class EditorScene extends Scene {
         this.drawGrid(ctx);
         
         this.editorManager.draw(ctx);
+        this.particleSystem.draw(ctx);
 
         ctx.restore();
     }
