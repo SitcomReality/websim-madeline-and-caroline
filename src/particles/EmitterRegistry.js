@@ -1,6 +1,6 @@
-import ParticleEmitter from '../ParticleEmitter.js';
-import AestheticParticle from '../AestheticParticle.js';
-import PhysicalParticle from '../PhysicalParticle.js';
+import ParticleEmitter from './ParticleEmitter.js';
+import AestheticParticle from './AestheticParticle.js';
+import PhysicalParticle from './PhysicalParticle.js';
 
 export default class EmitterRegistry {
     constructor(manager) {
