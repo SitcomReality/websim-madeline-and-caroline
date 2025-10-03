@@ -4,12 +4,16 @@ import Renderer from 'game/systems/Renderer';
 import { createPlayer } from 'game/entities/Player';
 import { createPlatform } from 'game/entities/Platform';
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from 'game/config/constants';
+import EditorScene from 'game/scenes/EditorScene';
+import InGameMenu from 'game/ui/InGameMenu';
 
 export default class GameScene extends Scene {
     init(params = {}) {
         this.physicsSystem = new PhysicsSystem();
         this.renderer = new Renderer();
         this.level = params.level || null;
+        this.menu = new InGameMenu(this.game, document.getElementById('menu-button'));
+        this.menu.showButton();
 
         const player = createPlayer(100, 100);
         this.addGameObject(player);
@@ -42,5 +46,10 @@ export default class GameScene extends Scene {
         ctx.fillStyle = bg;
         ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         this.renderer.draw(this.gameObjects, ctx);
+    }
+
+    destroy() {
+        if (this.menu) this.menu.destroy();
+        super.destroy();
     }
 }

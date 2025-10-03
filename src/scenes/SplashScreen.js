@@ -16,6 +16,7 @@ export default class SplashScreen extends Scene {
 
     init() {
         this.splashElement.classList.remove('hidden');
+        document.getElementById('menu-button').classList.add('hidden');
         this.startButton.onclick = () => this.startGame();
         this.editorButton.onclick = () => this.openEditor();
         this.loadButton.onclick = () => this.openLoadModal();
