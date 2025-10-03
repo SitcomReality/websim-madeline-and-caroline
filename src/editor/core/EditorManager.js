@@ -225,6 +225,30 @@ export default class EditorManager {
         ctx.lineWidth = 3;
         ctx.strokeRect(entity.x - 2, entity.y - 2, entity.width + 4, entity.height + 4);
 
+        // Draw emission direction for particle emitters
+        if (entity.type === 'particle_emitter') {
+            const centerX = entity.x + entity.width / 2;
+            const centerY = entity.y + entity.height / 2;
+            const angle = (entity.angle || -90) * Math.PI / 180;
+            const length = 40;
+            const endX = centerX + length * Math.cos(angle);
+            const endY = centerY + length * Math.sin(angle);
+
+            ctx.save();
+            ctx.strokeStyle = '#ff47ab';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(endX, endY);
+            // Arrowhead
+            ctx.moveTo(endX, endY);
+            ctx.lineTo(endX - 8 * Math.cos(angle - Math.PI / 6), endY - 8 * Math.sin(angle - Math.PI / 6));
+            ctx.moveTo(endX, endY);
+            ctx.lineTo(endX - 8 * Math.cos(angle + Math.PI / 6), endY - 8 * Math.sin(angle + Math.PI / 6));
+            ctx.stroke();
+            ctx.restore();
+        }
+
         // Draw resize handles
         const handleSize = 8;
         ctx.fillStyle = '#ff47ab';

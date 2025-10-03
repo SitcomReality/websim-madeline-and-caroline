@@ -93,7 +93,7 @@ export default class ParticleSystem {
         this.emitters.set('gasoline_spray', gasolineSpray);
 
         // Generic emitters for level objects
-        const genericAesthetic = new ParticleEmitter(this.manager, AestheticParticle, {
+        const magicSparkle = new ParticleEmitter(this.manager, AestheticParticle, {
             count: 1,
             lifetime: { min: 0.5, max: 1.5 },
             speed: { min: 10, max: 30 },
@@ -101,9 +101,9 @@ export default class ParticleSystem {
             startSize: { min: 2, max: 4 },
             endSize: 0
         });
-        this.emitters.set('generic_aesthetic', genericAesthetic);
+        this.emitters.set('magic_sparkle', magicSparkle);
 
-        const genericPhysical = new ParticleEmitter(this.manager, PhysicalParticle, {
+        const debris = new ParticleEmitter(this.manager, PhysicalParticle, {
             count: 1,
             lifetime: { min: 1, max: 2 },
             speed: { min: 10, max: 30 },
@@ -114,7 +114,33 @@ export default class ParticleSystem {
             friction: 0.95,
             ay: 400
         });
-        this.emitters.set('generic_physical', genericPhysical);
+        this.emitters.set('debris', debris);
+
+        // New emitters
+        const fireSparks = new ParticleEmitter(this.manager, AestheticParticle, {
+            count: 1,
+            lifetime: { min: 0.3, max: 0.8 },
+            speed: { min: 40, max: 120 },
+            angle: { min: -120, max: -60 },
+            startSize: { min: 1, max: 3 },
+            endSize: 0,
+            startColor: [255, 180, 50, 1],
+            endColor: [255, 80, 0, 0],
+        });
+        this.emitters.set('fire_sparks', fireSparks);
+
+        const smoke = new ParticleEmitter(this.manager, AestheticParticle, {
+            count: 1,
+            lifetime: { min: 1.5, max: 3.0 },
+            speed: { min: 10, max: 30 },
+            angle: {min: -100, max: -80},
+            startSize: { min: 5, max: 10 },
+            endSize: { min: 15, max: 25 },
+            startColor: [50, 50, 50, 0.7],
+            endColor: [50, 50, 50, 0],
+            ay: -20 // smoke rises
+        });
+        this.emitters.set('smoke', smoke);
 
         // Player death burst (color-matched)
         const playerDeathBurst = new ParticleEmitter(this.manager, AestheticParticle, {
@@ -126,6 +152,18 @@ export default class ParticleSystem {
             endSize: 0
         });
         this.emitters.set('player_death_burst', playerDeathBurst);
+    }
+
+    getAvailableEmitterTypes() {
+        // Exclude player-specific or internal emitters from the editor UI
+        return Array.from(this.emitters.keys()).filter(name => ![
+            'character_switch',
+            'madeline_dash',
+            'caroline_dash',
+            'player_death_burst',
+            'generic_aesthetic', // old ones
+            'generic_physical'
+        ].includes(name));
     }
 
     emit(emitterName, options) {

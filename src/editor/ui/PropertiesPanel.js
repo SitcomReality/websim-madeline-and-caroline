@@ -40,9 +40,17 @@ export default class PropertiesPanel extends UIComponent {
             properties.push({ label: 'Enemy Type', key: 'enemyType', type: 'select', options: ['basic', 'flying', 'turret'] });
             properties.push({ label: 'Spawn Interval', key: 'spawnInterval', type: 'number', step: 0.1 });
         } else if (entity.type === 'particle_emitter') {
-            properties.push({ label: 'Particle Type', key: 'particleType', type: 'select', options: ['aesthetic', 'physical'] });
-            properties.push({ label: 'Emit Rate', key: 'emitRate', type: 'number' });
+            const ps = this.editorUI.editorManager.game.sceneManager.scenes.game.particleSystem;
+            const emitterTypes = ps ? ps.getAvailableEmitterTypes() : ['magic_sparkle', 'debris'];
+            properties.push({ label: 'Emitter Type', key: 'emitterType', type: 'select', options: emitterTypes });
             properties.push({ label: 'Particle Color', key: 'particleColor', type: 'color' });
+            properties.push({ label: 'Emit Rate (/s)', key: 'emitRate', type: 'number' });
+            properties.push({ label: 'Emission Angle', key: 'angle', type: 'number', step: 1 });
+            properties.push({ label: 'Emission Cone (°)', key: 'cone', type: 'number', step: 1 });
+            properties.push({ label: 'Burst Mode', key: 'burstMode', type: 'checkbox' });
+            if (entity.burstMode) {
+                properties.push({ label: 'Burst Interval (s)', key: 'burstInterval', type: 'number', step: 0.1 });
+            }
         } else if (entity.type === 'ramp') {
             properties.push({ label: 'Angle', key: 'angle', type: 'number', step: 1 });
         }

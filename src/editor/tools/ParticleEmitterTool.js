@@ -9,9 +9,13 @@ export default class ParticleEmitterTool extends Tool {
             height: 32,
             color: '#ffffff',
             type: 'particle_emitter',
-            particleType: 'aesthetic',
+            emitterType: 'magic_sparkle',
             emitRate: 10,
-            particleColor: '#ffffff'
+            particleColor: '#ffffff',
+            angle: -90, // Default up
+            cone: 20,
+            burstMode: false,
+            burstInterval: 2
         };
         this.editorManager.addEntity(entity);
     }

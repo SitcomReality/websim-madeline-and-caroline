@@ -6,13 +6,23 @@ class EmitterController {
         this.config = config;
         this.timer = 0;
         this.emitInterval = 1 / (config.emitRate || 10);
+        this.burstMode = config.burstMode || false;
+        this.burstInterval = config.burstInterval || 2;
     }
 
     update(deltaTime) {
         this.timer += deltaTime;
-        if (this.timer >= this.emitInterval) {
-            this.timer = 0;
-            this.emit();
+
+        if (this.burstMode) {
+            if (this.timer >= this.burstInterval) {
+                this.timer = 0;
+                this.emit();
+            }
+        } else {
+            if (this.timer >= this.emitInterval) {
+                this.timer = 0;
+                this.emit();
+            }
         }
     }
 
@@ -23,14 +33,23 @@ class EmitterController {
         const { x, y } = this.gameObject.transform.position;
         const { width, height } = this.gameObject.transform.size;
 
-        const emitterName = this.config.particleType === 'physical' ? 'generic_physical' : 'generic_aesthetic';
+        const emitterName = this.config.emitterType || 'magic_sparkle';
+        const angle = this.config.angle || -90; // Default up
+        const cone = this.config.cone || 20; // Default 20 degree spread
+        
+        const emitOptions = {
+            x: x + width / 2,
+            y: y + height / 2,
+            color: this.config.particleColor || '#ffffff',
+            angle: { min: angle - cone / 2, max: angle + cone / 2 }
+        };
 
-        // This is a simplified emission. A more robust system would allow customizing all particle properties.
-        particleSystem.emit(emitterName, {
-            x: x + Math.random() * width,
-            y: y + Math.random() * height,
-            color: this.config.particleColor || '#ffffff'
-        });
+        // Don't override color if emitter has its own
+        if (this.config.particleColor) {
+             emitOptions.color = this.config.particleColor;
+        }
+
+        particleSystem.emit(emitterName, emitOptions);
     }
 }
 
@@ -40,3 +59,4 @@ export function createParticleEmitterObject(x, y, config) {
     emitter.addComponent(new EmitterController(config));
     return emitter;
 }
+

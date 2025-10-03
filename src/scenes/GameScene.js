@@ -95,6 +95,7 @@ export default class GameScene extends Scene {
                         this.addGameObject(createEnemySpawner(this, e.x, e.y, e.enemyType, e.spawnInterval));
                         break;
                     case 'particle_emitter':
+                        // Pass the full config object 'e' to the factory function
                         this.addGameObject(createParticleEmitterObject(e.x, e.y, e));
                         break;
                 }
