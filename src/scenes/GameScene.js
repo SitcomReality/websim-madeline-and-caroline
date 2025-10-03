@@ -17,6 +17,7 @@ import GasolineMeter from '../ui/GasolineMeter.js';
 import Camera from '../core/Camera.js';
 import Minimap from 'game/ui/Minimap';
 import EndScreen from '../ui/EndScreen.js';
+import ParallaxBackground from '../core/ParallaxBackground.js';
 
 export default class GameScene extends Scene {
     init(params = {}) {
@@ -28,6 +29,9 @@ export default class GameScene extends Scene {
         const worldWidth = this.level?.settings?.width || SCREEN_WIDTH;
         const worldHeight = this.level?.settings?.height || SCREEN_HEIGHT;
         this.camera = new Camera(worldWidth, worldHeight);
+
+        this.parallaxBackground = new ParallaxBackground(this.camera, { x: worldWidth, y: worldHeight });
+        this.parallaxBackground.init();
 
         const uiContainer = document.getElementById('game-ui');
         this.menu = new InGameMenu(this.game, document.getElementById('menu-button'));
@@ -138,7 +142,9 @@ export default class GameScene extends Scene {
         
         const bg = this.level?.settings?.backgroundColor || '#1e1e2e';
         ctx.fillStyle = bg;
-        ctx.fillRect(this.camera.position.x, this.camera.position.y, SCREEN_WIDTH, SCREEN_HEIGHT);
+        ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        
+        this.parallaxBackground.draw(ctx);
         
         this.camera.applyTransform(ctx);
 
