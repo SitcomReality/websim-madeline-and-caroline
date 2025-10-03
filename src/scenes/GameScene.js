@@ -10,6 +10,7 @@ import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../config/constants.js';
 import InGameMenu from '../ui/InGameMenu.js';
 import CharacterDisplay from '../ui/CharacterDisplay.js';
 import GasolineMeter from '../ui/GasolineMeter.js';
+import Camera from '../core/Camera.js';
 
 export default class GameScene extends Scene {
     init(params = {}) {
@@ -18,12 +19,18 @@ export default class GameScene extends Scene {
         this.particleSystem = new ParticleSystem();
         this.level = params.level || null;
 
+        const worldWidth = this.level?.settings?.width || SCREEN_WIDTH;
+        const worldHeight = this.level?.settings?.height || SCREEN_HEIGHT;
+        this.camera = new Camera(worldWidth, worldHeight);
+
         const uiContainer = document.getElementById('game-ui');
         this.menu = new InGameMenu(this.game, document.getElementById('menu-button'));
         this.menu.showButton();
 
         const player = createPlayer(100, 100);
         this.addGameObject(player);
+        this.camera.setTarget(player);
+
         const characterController = player.getComponent('CharacterController');
         this.characterDisplay = new CharacterDisplay(characterController);
         this.characterDisplay.init(uiContainer);
@@ -61,14 +68,22 @@ export default class GameScene extends Scene {
         super.update(deltaTime); // Updates all game objects
         this.physicsSystem.update(this.gameObjects, deltaTime);
         this.particleSystem.update(deltaTime, this.gameObjects);
+        this.camera.update(deltaTime);
     }
 
     draw(ctx) {
+        ctx.save();
+        
         const bg = this.level?.settings?.backgroundColor || '#1e1e2e';
         ctx.fillStyle = bg;
-        ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        ctx.fillRect(this.camera.position.x, this.camera.position.y, SCREEN_WIDTH, SCREEN_HEIGHT);
+        
+        this.camera.applyTransform(ctx);
+
         this.renderer.draw(this.gameObjects, ctx);
         this.particleSystem.draw(ctx);
+
+        ctx.restore();
     }
 
     destroy() {

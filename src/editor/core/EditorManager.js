@@ -4,10 +4,13 @@ import PlatformTool from 'game/editor/tools/PlatformTool';
 import SelectTool from 'game/editor/tools/SelectTool';
 import DeleteTool from 'game/editor/tools/DeleteTool';
 import InputManager from '../../core/InputManager.js';
+import Vector2 from '../../utils/Vector2.js';
 
 export default class EditorManager {
-    constructor(game) {
+    constructor(game, scene) {
         this.game = game;
+        this.scene = scene;
+        this.camera = scene.camera;
         this.state = new EditorState();
         this.ui = new EditorUI(this);
         this.tools = {
@@ -32,35 +35,61 @@ export default class EditorManager {
         this.canvas.addEventListener('mouseup', this.handleMouseUp.bind(this));
         this.canvas.addEventListener('click', this.handleClick.bind(this));
 
+        // Prevent context menu on right click for panning
+        this.canvas.addEventListener('contextmenu', e => e.preventDefault());
+
         document.addEventListener('keydown', this.handleKeyDown.bind(this));
     }
 
     handleMouseDown(e) {
+        if (e.button === 1) { // Middle mouse button
+            this.camera.isPanning = true;
+            this.camera.panStart.set(e.clientX, e.clientY);
+            this.camera.panPositionStart.set(this.camera.position.x, this.camera.position.y);
+            this.canvas.style.cursor = 'grabbing';
+            e.preventDefault();
+            return;
+        }
+
         const rect = this.canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        this.currentTool.onMouseDown(x, y);
+        const screenPos = new Vector2(e.clientX - rect.left, e.clientY - rect.top);
+        const worldPos = this.camera.screenToWorld(screenPos);
+        this.currentTool.onMouseDown(worldPos.x, worldPos.y);
     }
 
     handleMouseMove(e) {
+        if (this.camera.isPanning) {
+            const dx = e.clientX - this.camera.panStart.x;
+            const dy = e.clientY - this.camera.panStart.y;
+            this.camera.position.set(this.camera.panPositionStart.x - dx, this.camera.panPositionStart.y - dy);
+            this.camera.clampToBounds();
+            return;
+        }
+
         const rect = this.canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        this.currentTool.onMouseMove(x, y);
+        const screenPos = new Vector2(e.clientX - rect.left, e.clientY - rect.top);
+        const worldPos = this.camera.screenToWorld(screenPos);
+        this.currentTool.onMouseMove(worldPos.x, worldPos.y);
     }
 
     handleMouseUp(e) {
+        if (e.button === 1) {
+            this.camera.isPanning = false;
+            this.canvas.style.cursor = 'default';
+            return;
+        }
+
         const rect = this.canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        this.currentTool.onMouseUp(x, y);
+        const screenPos = new Vector2(e.clientX - rect.left, e.clientY - rect.top);
+        const worldPos = this.camera.screenToWorld(screenPos);
+        this.currentTool.onMouseUp(worldPos.x, worldPos.y);
     }
 
     handleClick(e) {
         const rect = this.canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        this.currentTool.onClick(x, y);
+        const screenPos = new Vector2(e.clientX - rect.left, e.clientY - rect.top);
+        const worldPos = this.camera.screenToWorld(screenPos);
+        this.currentTool.onClick(worldPos.x, worldPos.y);
     }
 
     handleKeyDown(e) {
