@@ -1,4 +1,4 @@
-import InputManager from '../../core/InputManager.js';
+import InputManager from '../../../core/InputManager.js';
 import { createFire } from '../../../entities/Fire.js';
 import { createFuelCan } from '../../../entities/FuelCan.js';
 import { FUEL_SPRAY_RATE } from '../../../config/constants.js';
