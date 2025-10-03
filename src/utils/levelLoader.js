@@ -2,7 +2,7 @@ export const BUNDLED_MAPS = [
     { name: "Saline Trampoline", path: "src/maps/Saline_Trampoline.json" },
     { name: "Chromatic Ascent", path: "src/maps/Chromatic_Ascent.json" },
     { name: "Prism Path", path: "src/maps/Prism_Path.json" },
-    { name: "Prismatic Pathway", path: "src/maps/Prismatic_Pathway.json" }
+    { name: "Colorful Cringe", path: "src/maps/Colorful_Cringe.json" }
 ];
 
 export async function fetchLevelData(path) {
