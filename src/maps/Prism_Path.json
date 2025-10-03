@@ -1,15 +1,8 @@
 {
-  "settings": {
-    "width": 3000,
-    "height": 800,
-    "backgroundColor": "#0f0f1a",
-    "gravity": 800,
-    "name": "Prism Path"
-  },
   "entities": [
     {
-      "x": 150,
-      "y": 700,
+      "x": 220,
+      "y": 520,
       "width": 40,
       "height": 20,
       "color": "#38b000",
@@ -87,7 +80,6 @@
       "color": "#00BFFF",
       "type": "platform"
     },
-    
     {
       "x": 250,
       "y": 670,
@@ -348,5 +340,12 @@
       "lifetime": 1500,
       "size": 3
     }
-  ]
+  ],
+  "settings": {
+    "width": 3000,
+    "height": 800,
+    "backgroundColor": "#0f0f1a",
+    "gravity": 800,
+    "name": "Prism Path"
+  }
 }
