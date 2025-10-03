@@ -1,7 +1,6 @@
 import ParticleEmitter from '../ParticleEmitter.js';
 import AestheticParticle from '../AestheticParticle.js';
 import PhysicalParticle from '../PhysicalParticle.js';
-import SlimeParticle from '../SlimeParticle.js';
 
 export function registerDefaultEmitters(registry) {
     const m = registry.manager;
@@ -75,6 +74,19 @@ export function registerDefaultEmitters(registry) {
         ay: 500
     }));
 
+    registry.register('slime_blob', new ParticleEmitter(m, PhysicalParticle, {
+        count: 5,
+        lifetime: { min: 3.0, max: 5.0 },
+        speed: { min: 50, max: 100 },
+        startSize: { min: 4, max: 7 },
+        endSize: 3,
+        startColor: [50, 200, 50, 0.9], // Greenish slime color
+        endColor: [30, 100, 30, 0.7],
+        bounciness: 0.1, // Low bounce, sticky
+        friction: 0.98, // High friction
+        ay: 500
+    }));
+
     registry.register('magic_sparkle', new ParticleEmitter(m, AestheticParticle, {
         count: 1,
         lifetime: { min: 0.5, max: 1.5 },
@@ -126,20 +138,5 @@ export function registerDefaultEmitters(registry) {
         lifetime: { min: 0.6, max: 1.2 },
         startSize: { min: 1, max: 3 },
         endSize: 0
-    }));
-
-    registry.register('slime_drip', new ParticleEmitter(m, SlimeParticle, {
-        count: 4,
-        lifetime: { min: 3.0, max: 6.0 },
-        speed: { min: 60, max: 120 },
-        angle: { min: 75, max: 105 }, // mostly downward
-        startSize: { min: 4, max: 7 },
-        endSize: { min: 3, max: 5 },
-        startColor: [90, 200, 90, 0.95],
-        endColor: [90, 200, 90, 0.6],
-        bounciness: 0.05,
-        friction: 0.98,
-        ay: 400,
-        stickThreshold: 8
     }));
 }
