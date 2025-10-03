@@ -1,4 +1,6 @@
 import Scene from 'game/scenes/Scene';
+import LocalStorageManager from 'game/editor/serialization/LocalStorageManager';
+import LevelSerializer from 'game/editor/serialization/LevelSerializer';
 
 export default class SplashScreen extends Scene {
     constructor(game) {
@@ -6,12 +8,17 @@ export default class SplashScreen extends Scene {
         this.splashElement = document.getElementById('splash-screen');
         this.startButton = document.getElementById('start-game-btn');
         this.editorButton = document.getElementById('map-editor-btn');
+        this.loadButton = document.getElementById('load-map-btn');
+        this.storage = new LocalStorageManager();
+        this.serializer = new LevelSerializer();
+        this.modalEl = null;
     }
 
     init() {
         this.splashElement.classList.remove('hidden');
         this.startButton.onclick = () => this.startGame();
         this.editorButton.onclick = () => this.openEditor();
+        this.loadButton.onclick = () => this.openLoadModal();
     }
 
     startGame() {
@@ -27,6 +34,62 @@ export default class SplashScreen extends Scene {
     destroy() {
         this.startButton.onclick = null;
         this.editorButton.onclick = null;
+        this.loadButton.onclick = null;
+        if (this.modalEl) this.modalEl.remove();
+    }
+
+    openLoadModal() {
+        if (this.modalEl) this.modalEl.remove();
+        const modal = document.createElement('div');
+        modal.className = 'save-load-modal';
+        const title = document.createElement('h2');
+        title.textContent = 'Load Saved Map';
+        modal.appendChild(title);
+        const levels = this.storage.listLevels();
+        if (levels.length === 0) {
+            const p = document.createElement('p');
+            p.textContent = 'No saved levels found.';
+            modal.appendChild(p);
+        } else {
+            const list = document.createElement('ul');
+            list.className = 'level-list';
+            levels.forEach(name => {
+                const item = document.createElement('li');
+                item.className = 'level-list-item';
+                const span = document.createElement('span');
+                span.textContent = name;
+                span.onclick = () => this.loadLevelAndStart(name);
+                const del = document.createElement('button');
+                del.textContent = '✕';
+                del.onclick = (e) => { e.stopPropagation(); if (confirm(`Delete "${name}"?`)) { this.storage.deleteLevel(name); this.openLoadModal(); } };
+                item.appendChild(span);
+                item.appendChild(del);
+                list.appendChild(item);
+            });
+            modal.appendChild(list);
+        }
+        const actions = document.createElement('div');
+        actions.className = 'modal-actions';
+        const cancel = document.createElement('button');
+        cancel.textContent = 'Cancel';
+        cancel.onclick = () => { modal.remove(); this.modalEl = null; };
+        actions.appendChild(cancel);
+        modal.appendChild(actions);
+        document.getElementById('game-container').appendChild(modal);
+        this.modalEl = modal;
+    }
+
+    loadLevelAndStart(name) {
+        const data = this.storage.loadLevel(name);
+        if (!data) return;
+        const state = this.serializer.deserialize(data);
+        if (!state) return;
+        if (this.modalEl) { this.modalEl.remove(); this.modalEl = null; }
+        this.startGameWithLevel(state);
+    }
+
+    startGameWithLevel(levelState) {
+        this.splashElement.classList.add('hidden');
+        this.game.sceneManager.changeScene('game', { level: levelState });
     }
 }
-
