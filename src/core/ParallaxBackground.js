@@ -2,17 +2,16 @@ export default class ParallaxBackground {
     constructor(camera, worldSize, themeColors) {
         this.camera = camera;
         this.worldSize = worldSize;
-        this.themeColors = themeColors || ['#ff47ab', '#47ffff', '#ffff47'];
+        // Use a much darker, muted palette by default so background doesn't overpower the level
+        this.themeColors = themeColors || ['#2a2a3a', '#1e2933', '#2d2b36'];
         this.layers = [];
     }
 
     init() {
-        // Layer 1: Farthest, slowest
-        this.layers.push(this.createLayer(0.2, 80, { min: 150, max: 400 }, { min: 0.1, max: 0.2 }));
-        // Layer 2: Mid-ground
-        this.layers.push(this.createLayer(0.4, 60, { min: 80, max: 200 }, { min: 0.2, max: 0.4 }));
-        // Layer 3: Closer, faster
-        this.layers.push(this.createLayer(0.7, 40, { min: 40, max: 120 }, { min: 0.3, max: 0.6 }));
+        // Darker, subtler layers with lower opacities so map remains readable
+        this.layers.push(this.createLayer(0.2, 80, { min: 150, max: 400 }, { min: 0.04, max: 0.08 }));
+        this.layers.push(this.createLayer(0.4, 60, { min: 80, max: 200 }, { min: 0.06, max: 0.12 }));
+        this.layers.push(this.createLayer(0.7, 40, { min: 40, max: 120 }, { min: 0.08, max: 0.16 }));
     }
 
     createLayer(parallaxFactor, numShapes, sizeRange, opacityRange) {
@@ -51,6 +50,8 @@ export default class ParallaxBackground {
     draw(ctx) {
         for (const layer of this.layers) {
             ctx.save();
+            // Reduce overall layer alpha so parallax is unobtrusive
+            ctx.globalAlpha = 0.6;
             const parallaxX = this.camera.position.x * layer.parallaxFactor;
             const parallaxY = this.camera.position.y * layer.parallaxFactor;
             ctx.translate(-parallaxX, -parallaxY);
