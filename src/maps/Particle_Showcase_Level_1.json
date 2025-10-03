@@ -1,0 +1,357 @@
+{
+  "entities": [
+    {
+      "x": 100,
+      "y": 700,
+      "width": 32,
+      "height": 32,
+      "color": "#f0f0f0",
+      "type": "player_start"
+    },
+    {
+      "x": 1900,
+      "y": 150,
+      "width": 40,
+      "height": 80,
+      "color": "#ffffff",
+      "type": "exit_door"
+    },
+    {
+      "x": 50,
+      "y": 750,
+      "width": 20,
+      "height": 50,
+      "color": "#ff0000",
+      "type": "platform"
+    },
+    {
+      "x": 70,
+      "y": 750,
+      "width": 20,
+      "height": 50,
+      "color": "#ff4000",
+      "type": "platform"
+    },
+    {
+      "x": 90,
+      "y": 750,
+      "width": 20,
+      "height": 50,
+      "color": "#ff8000",
+      "type": "platform"
+    },
+    {
+      "x": 110,
+      "y": 750,
+      "width": 20,
+      "height": 50,
+      "color": "#ffbf00",
+      "type": "platform"
+    },
+    {
+      "x": 130,
+      "y": 750,
+      "width": 20,
+      "height": 50,
+      "color": "#ffff00",
+      "type": "platform"
+    },
+    {
+      "x": 250,
+      "y": 700,
+      "width": 150,
+      "height": 20,
+      "color": "#bfff00",
+      "type": "platform"
+    },
+    {
+      "x": 300,
+      "y": 680,
+      "width": 32,
+      "height": 32,
+      "color": "#ffffff",
+      "type": "particle_emitter",
+      "emitterType": "rising_embers",
+      "emitRate": 20,
+      "particleColor": "#bfff00",
+      "angle": -90,
+      "cone": 45,
+      "burstMode": false,
+      "burstInterval": 2,
+      "burstSize": 10
+    },
+    {
+      "x": 450,
+      "y": 650,
+      "width": 20,
+      "height": 150,
+      "color": "#80ff00",
+      "type": "platform"
+    },
+    {
+      "x": 470,
+      "y": 650,
+      "width": 20,
+      "height": 150,
+      "color": "#40ff00",
+      "type": "platform"
+    },
+    {
+      "x": 490,
+      "y": 650,
+      "width": 20,
+      "height": 150,
+      "color": "#00ff00",
+      "type": "platform"
+    },
+    {
+      "x": 600,
+      "y": 550,
+      "width": 120,
+      "height": 20,
+      "color": "#00ff40",
+      "type": "platform"
+    },
+    {
+      "x": 650,
+      "y": 530,
+      "width": 32,
+      "height": 32,
+      "color": "#ffffff",
+      "type": "particle_emitter",
+      "emitterType": "ethereal_glow",
+      "emitRate": 3,
+      "particleColor": "#00ff80",
+      "angle": 0,
+      "cone": 360,
+      "burstMode": false,
+      "burstInterval": 2,
+      "burstSize": 10
+    },
+    {
+      "x": 750,
+      "y": 500,
+      "width": 20,
+      "height": 100,
+      "color": "#00ffbf",
+      "type": "platform"
+    },
+    {
+      "x": 770,
+      "y": 500,
+      "width": 20,
+      "height": 100,
+      "color": "#00ffff",
+      "type": "platform"
+    },
+    {
+      "x": 900,
+      "y": 450,
+      "width": 180,
+      "height": 20,
+      "color": "#00bfff",
+      "type": "platform"
+    },
+    {
+      "x": 980,
+      "y": 260,
+      "width": 32,
+      "height": 32,
+      "color": "#ffffff",
+      "type": "particle_emitter",
+      "emitterType": "gentle_rain",
+      "emitRate": 4,
+      "particleColor": "#0080ff",
+      "angle": 90,
+      "cone": 188,
+      "burstMode": false,
+      "burstInterval": 2,
+      "burstSize": 10
+    },
+    {
+      "x": 1150,
+      "y": 400,
+      "width": 20,
+      "height": 80,
+      "color": "#0040ff",
+      "type": "platform"
+    },
+    {
+      "x": 1170,
+      "y": 400,
+      "width": 20,
+      "height": 80,
+      "color": "#0000ff",
+      "type": "platform"
+    },
+    {
+      "x": 1300,
+      "y": 350,
+      "width": 150,
+      "height": 20,
+      "color": "#4000ff",
+      "type": "platform"
+    },
+    {
+      "x": 1375,
+      "y": 330,
+      "width": 32,
+      "height": 32,
+      "color": "#ffffff",
+      "type": "particle_emitter",
+      "emitterType": "magic_sparkle",
+      "emitRate": 20,
+      "particleColor": "#8000ff",
+      "angle": 0,
+      "cone": 360,
+      "burstMode": false,
+      "burstInterval": 2,
+      "burstSize": 20
+    },
+    {
+      "x": 1500,
+      "y": 300,
+      "width": 20,
+      "height": 120,
+      "color": "#bf00ff",
+      "type": "platform"
+    },
+    {
+      "x": 1520,
+      "y": 300,
+      "width": 20,
+      "height": 120,
+      "color": "#ff00ff",
+      "type": "platform"
+    },
+    {
+      "x": 1540,
+      "y": 300,
+      "width": 20,
+      "height": 120,
+      "color": "#ff00bf",
+      "type": "platform"
+    },
+    {
+      "x": 1700,
+      "y": 250,
+      "width": 250,
+      "height": 20,
+      "color": "#ff0080",
+      "type": "platform"
+    },
+    {
+      "x": 1825,
+      "y": 230,
+      "width": 32,
+      "height": 32,
+      "color": "#ffffff",
+      "type": "particle_emitter",
+      "emitterType": "celebration_sparkle",
+      "emitRate": 100,
+      "particleColor": "#ff0040",
+      "angle": -90,
+      "cone": 45,
+      "burstMode": true,
+      "burstInterval": 1,
+      "burstSize": 50
+    },
+    {
+      "x": 1151,
+      "y": 329,
+      "width": 32,
+      "height": 32,
+      "color": "#ff00ff",
+      "type": "enemy_spawner",
+      "enemyType": "basic",
+      "spawnInterval": 5
+    },
+    {
+      "x": 1000,
+      "y": 600,
+      "width": 32,
+      "height": 32,
+      "color": "#ffffff",
+      "type": "particle_emitter",
+      "emitterType": "ethereal_glow",
+      "emitRate": 5,
+      "particleColor": "#00ff80",
+      "angle": 0,
+      "cone": 360,
+      "burstMode": false,
+      "burstInterval": 2,
+      "burstSize": 10
+    },
+    {
+      "x": 1200,
+      "y": 500,
+      "width": 32,
+      "height": 32,
+      "color": "#ffffff",
+      "type": "particle_emitter",
+      "emitterType": "gentle_rain",
+      "emitRate": 6,
+      "particleColor": "#0080ff",
+      "angle": 90,
+      "cone": 188,
+      "burstMode": false,
+      "burstInterval": 2,
+      "burstSize": 10
+    },
+    {
+      "x": 1400,
+      "y": 400,
+      "width": 32,
+      "height": 32,
+      "color": "#ffffff",
+      "type": "particle_emitter",
+      "emitterType": "magic_sparkle",
+      "emitRate": 25,
+      "particleColor": "#8000ff",
+      "angle": 0,
+      "cone": 360,
+      "burstMode": false,
+      "burstInterval": 2,
+      "burstSize": 20
+    },
+    {
+      "x": 1600,
+      "y": 300,
+      "width": 32,
+      "height": 32,
+      "color": "#ffffff",
+      "type": "particle_emitter",
+      "emitterType": "celebration_sparkle",
+      "emitRate": 120,
+      "particleColor": "#ff0040",
+      "angle": -90,
+      "cone": 45,
+      "burstMode": true,
+      "burstInterval": 1,
+      "burstSize": 50
+    },
+    {
+      "x": 1800,
+      "y": 200,
+      "width": 32,
+      "height": 32,
+      "color": "#ffffff",
+      "type": "particle_emitter",
+      "emitterType": "rising_embers",
+      "emitRate": 25,
+      "particleColor": "#bfff00",
+      "angle": -90,
+      "cone": 45,
+      "burstMode": false,
+      "burstInterval": 2,
+      "burstSize": 10
+    }
+  ],
+  "settings": {
+    "width": 2000,
+    "height": 800,
+    "backgroundColor": "#1a1a2e",
+    "gravity": 980,
+    "name": "Particle Showcase Level 1"
+  }
+}
