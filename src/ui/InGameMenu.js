@@ -1,5 +1,8 @@
-export default class InGameMenu {
+import UIComponent from './UIComponent.js';
+
+export default class InGameMenu extends UIComponent {
     constructor(game, buttonEl) {
+        super();
         this.game = game;
         this.buttonEl = buttonEl;
         this.modalEl = null;

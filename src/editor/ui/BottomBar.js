@@ -1,14 +1,15 @@
-export default class BottomBar {
+import UIComponent from '../../ui/UIComponent.js';
+
+export default class BottomBar extends UIComponent {
     constructor(editorUI) {
+        super();
         this.editorUI = editorUI;
-        this.element = null;
         this.undoBtn = null;
         this.redoBtn = null;
     }
 
     init() {
-        this.element = document.createElement('div');
-        this.element.className = 'editor-bottom-bar';
+        this.createElement('div', 'editor-bottom-bar', this.editorUI.container);
 
         const actions = document.createElement('div');
         actions.className = 'editor-actions';
@@ -63,4 +64,3 @@ export default class BottomBar {
         this.editorUI.editorManager.game.sceneManager.changeScene('splash');
     }
 }
-

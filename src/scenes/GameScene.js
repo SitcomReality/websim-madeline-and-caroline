@@ -42,6 +42,7 @@ export default class GameScene extends Scene {
         
         // Minimap
         this.minimap = new Minimap(uiContainer, worldWidth, worldHeight);
+        this.minimap.init();
         this.playerRef = player;
 
         if (this.level?.settings?.gravity != null) {

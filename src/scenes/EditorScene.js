@@ -14,6 +14,7 @@ export default class EditorScene extends Scene {
         this.editorManager = new EditorManager(this.game, this);
         this.editorManager.init();
         this.editorMinimap = new EditorMinimap(this);
+        this.editorMinimap.init();
     }
 
     update(deltaTime) {

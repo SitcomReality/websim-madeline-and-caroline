@@ -1,13 +1,14 @@
-export default class CharacterDisplay {
+import UIComponent from './UIComponent.js';
+
+export default class CharacterDisplay extends UIComponent {
     constructor(playerCharacterController) {
+        super();
         this.controller = playerCharacterController;
-        this.element = null;
         this.nameElement = null;
     }
 
     init(container) {
-        this.element = document.createElement('div');
-        this.element.id = 'character-display';
+        this.createElement('div', 'character-display', container);
 
         const title = document.createElement('h4');
         title.textContent = 'ACTIVE CHARACTER';
@@ -16,8 +17,6 @@ export default class CharacterDisplay {
         this.nameElement = document.createElement('div');
         this.nameElement.className = 'char-name';
         this.element.appendChild(this.nameElement);
-
-        container.appendChild(this.element);
         
         this.update();
         
@@ -35,13 +34,10 @@ export default class CharacterDisplay {
     }
 
     destroy() {
-        if (this.element) {
-            this.element.remove();
-            this.element = null;
-        }
         if (this.controller) {
             this.controller.onCharacterSwitch = () => {};
         }
+        super.destroy();
     }
 }
 

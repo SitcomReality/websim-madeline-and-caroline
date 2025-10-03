@@ -1,13 +1,13 @@
-export default class PropertiesPanel {
+import UIComponent from '../../ui/UIComponent.js';
+
+export default class PropertiesPanel extends UIComponent {
     constructor(editorUI) {
+        super();
         this.editorUI = editorUI;
-        this.element = null;
     }
 
     init() {
-        this.element = document.createElement('div');
-        this.element.className = 'editor-properties';
-        this.editorUI.container.appendChild(this.element);
+        this.createElement('div', 'editor-properties', this.editorUI.container);
         this.update();
     }
 

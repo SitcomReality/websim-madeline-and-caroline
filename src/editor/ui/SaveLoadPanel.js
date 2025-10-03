@@ -1,10 +1,11 @@
+import UIComponent from '../../ui/UIComponent.js';
 import LevelSerializer from 'game/editor/serialization/LevelSerializer';
 import LocalStorageManager from 'game/editor/serialization/LocalStorageManager';
 
-export default class SaveLoadPanel {
+export default class SaveLoadPanel extends UIComponent {
     constructor(editorUI) {
+        super();
         this.editorUI = editorUI;
-        this.element = null;
         this.serializer = new LevelSerializer();
         this.storage = new LocalStorageManager();
     }
@@ -142,4 +143,3 @@ export default class SaveLoadPanel {
         }
     }
 }
-

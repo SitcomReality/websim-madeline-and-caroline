@@ -1,13 +1,14 @@
-export default class GasolineMeter {
+import UIComponent from './UIComponent.js';
+
+export default class GasolineMeter extends UIComponent {
     constructor(playerFuelController) {
+        super();
         this.controller = playerFuelController;
-        this.element = null;
         this.barElement = null;
     }
 
     init(container) {
-        this.element = document.createElement('div');
-        this.element.id = 'gasoline-meter';
+        this.createElement('div', 'gasoline-meter', container);
 
         const title = document.createElement('h4');
         title.textContent = 'GASOLINE';
@@ -21,7 +22,6 @@ export default class GasolineMeter {
         barContainer.appendChild(this.barElement);
 
         this.element.appendChild(barContainer);
-        container.appendChild(this.element);
 
         this.update();
 
@@ -40,13 +40,10 @@ export default class GasolineMeter {
     }
 
     destroy() {
-        if (this.element) {
-            this.element.remove();
-            this.element = null;
-        }
         if (this.controller) {
             this.controller.onFuelChange = () => {};
         }
+        super.destroy();
     }
 }
 

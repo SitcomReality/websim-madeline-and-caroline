@@ -1,7 +1,9 @@
-export default class Toolbar {
+import UIComponent from '../../ui/UIComponent.js';
+
+export default class Toolbar extends UIComponent {
     constructor(editorUI) {
+        super();
         this.editorUI = editorUI;
-        this.element = null;
         this.tools = [
             { name: 'platform', label: 'Platform', icon: '▭' },
             { name: 'select', label: 'Select', icon: '⌖' },
@@ -12,8 +14,7 @@ export default class Toolbar {
     }
 
     init() {
-        this.element = document.createElement('div');
-        this.element.className = 'editor-toolbar';
+        this.createElement('div', 'editor-toolbar', this.editorUI.container);
         
         this.tools.forEach(tool => {
             const button = document.createElement('button');
@@ -35,7 +36,6 @@ export default class Toolbar {
         };
         this.element.appendChild(snapBtn);
 
-        this.editorUI.container.appendChild(this.element);
         this.updateSelection('platform');
     }
 
@@ -54,3 +54,4 @@ export default class Toolbar {
         });
     }
 }
+

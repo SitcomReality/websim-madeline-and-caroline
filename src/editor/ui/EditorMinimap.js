@@ -1,30 +1,42 @@
-export default class EditorMinimap {
+import UIComponent from '../../ui/UIComponent.js';
+
+export default class EditorMinimap extends UIComponent {
     constructor(editorScene, options = {}) {
+        super();
         this.scene = editorScene;
         this.editor = editorScene.editorManager;
         this.width = options.width || 200;
         this.height = options.height || 140;
-        this.container = document.createElement('div');
-        this.container.className = 'minimap';
-        this.container.style.right = '20px';
-        this.container.style.top = '20px';
-        this.container.style.bottom = '';
+        this.header = null;
+        this.canvas = null;
+        this.ctx = null;
+        this.toggleBtn = null;
+        this.hidden = false;
+    }
+
+    init() {
+        this.createElement('div', 'minimap', document.getElementById('editor-ui'));
+        this.element.style.right = '20px';
+        this.element.style.top = '20px';
+        this.element.style.bottom = '';
+        
         this.header = document.createElement('div');
         this.header.className = 'minimap-header';
         this.header.innerHTML = '<span>Editor Minimap</span>';
+        
         this.toggleBtn = document.createElement('button');
         this.toggleBtn.className = 'mini-toggle';
         this.toggleBtn.textContent = 'Hide';
         this.toggleBtn.onclick = () => this.toggle();
         this.header.appendChild(this.toggleBtn);
+        
         this.canvas = document.createElement('canvas');
         this.canvas.width = this.width;
         this.canvas.height = this.height;
         this.ctx = this.canvas.getContext('2d');
-        this.container.appendChild(this.header);
-        this.container.appendChild(this.canvas);
-        document.getElementById('editor-ui').appendChild(this.container);
-        this.hidden = false;
+        
+        this.element.appendChild(this.header);
+        this.element.appendChild(this.canvas);
 
         // Click to move camera
         this.canvas.addEventListener('click', (e) => this.handleClick(e));
@@ -92,10 +104,6 @@ export default class EditorMinimap {
         ctx.strokeStyle = '#ff47ab';
         ctx.lineWidth = 2;
         ctx.strokeRect(vx, vy, vw, vh);
-    }
-
-    destroy() {
-        this.container.remove();
     }
 }
 

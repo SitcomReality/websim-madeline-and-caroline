@@ -32,7 +32,7 @@
     z-index: 15;
 }
 
-#character-display {
+.character-display {
     position: absolute;
     bottom: 20px;
     left: 20px;
@@ -44,19 +44,19 @@
     pointer-events: auto;
 }
 
-#character-display h4 {
+.character-display h4 {
     margin: 0 0 5px 0;
     font-size: 0.8rem;
     color: var(--text-secondary);
     font-weight: normal;
 }
 
-#character-display .char-name {
+.character-display .char-name {
     font-size: 1.2rem;
     font-weight: bold;
 }
 
-#gasoline-meter {
+.gasoline-meter {
     position: absolute;
     bottom: 20px;
     left: 200px;
@@ -69,7 +69,7 @@
     width: 200px;
 }
 
-#gasoline-meter h4 {
+.gasoline-meter h4 {
     margin: 0 0 5px 0;
     font-size: 0.8rem;
     color: var(--color-accent);
@@ -89,3 +89,4 @@
     width: 100%;
     transition: width var(--transition-medium);
 }
+
