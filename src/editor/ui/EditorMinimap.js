@@ -18,10 +18,12 @@ export default class EditorMinimap extends UIComponent {
         this.createElement('div', 'minimap', document.getElementById('editor-ui'));
         // Constrain the wrapper height so it doesn't stretch the entire page
         this.element.style.right = '20px';
-        this.element.style.top = '20px';
-        this.element.style.bottom = '';
+        // Position at bottom-right and leave space above the editor bottom bar
+        this.element.style.bottom = '80px';
+        this.element.style.top = '';
         this.element.style.display = 'inline-block';
-        this.element.style.height = `${this.height + 36}px`; // header + canvas padding
+        // Add a bit more vertical space to account for header/padding and the hide button
+        this.element.style.height = `${this.height + 48}px`; // header + canvas padding + buffer
         
         this.header = document.createElement('div');
         this.header.className = 'minimap-header';
