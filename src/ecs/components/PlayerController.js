@@ -16,8 +16,13 @@ export default class PlayerController extends Component {
     }
     
     init() {
-        // Get other components
-        this.movementState = this.gameObject.getComponent('MovementState') || this.gameObject.addComponent(new MovementState());
+        // Get other components - ensure they exist
+        this.movementState = this.gameObject.getComponent('MovementState');
+        if (!this.movementState) {
+            this.movementState = new MovementState();
+            this.gameObject.addComponent(this.movementState);
+        }
+        
         this.characterController = this.gameObject.getComponent('CharacterController');
         
         // Register double-tap callbacks
@@ -26,7 +31,7 @@ export default class PlayerController extends Component {
         InputBuffer.registerDoubleTap('KeyD', () => this.dash(1, 0));
         InputBuffer.registerDoubleTap('ArrowRight', () => this.dash(1, 0));
         InputBuffer.registerDoubleTap('KeyW', () => this.dash(0, -1));
-        InputBuffer.registerDoubleTap('ArrowUp', () => this.dash(0, -1));
+        InputBuffer.registerDoubleTap('ArrowUp', () => this.dash(0, 1));
         InputBuffer.registerDoubleTap('KeyS', () => this.dash(0, 1));
         InputBuffer.registerDoubleTap('ArrowDown', () => this.dash(0, 1));
     }
@@ -35,6 +40,7 @@ export default class PlayerController extends Component {
         const physics = this.gameObject.getComponent('Physics');
         if (!physics) return;
         
+        // Ensure components are initialized
         if (!this.movementState || !this.characterController) {
             this.init();
         }
@@ -43,7 +49,7 @@ export default class PlayerController extends Component {
         InputBuffer.update();
         
         // Handle different movement states
-        if (this.movementState.isDashing) {
+        if (this.movementState && this.movementState.isDashing) {
             this.updateDashing(deltaTime, physics);
         } else {
             this.updateNormalMovement(deltaTime, physics);
