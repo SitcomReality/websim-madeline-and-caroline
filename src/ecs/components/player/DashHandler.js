@@ -1,5 +1,5 @@
-import InputManager from '../../core/InputManager.js';
-import { GRAVITY } from '../../config/constants.js';
+import InputManager from '../../../core/InputManager.js';
+import { GRAVITY } from '../../../config/constants.js';
 
 export default class DashHandler {
     constructor(playerController) {
