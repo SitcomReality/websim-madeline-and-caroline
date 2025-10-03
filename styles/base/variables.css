@@ -1,5 +1,8 @@
 /* Cyberpunk theme variables */
 :root {
+    /* Fonts */
+    --font-primary: 'Rajdhani', sans-serif;
+
     /* Primary colors */
     --color-primary: #ff47ab;
     --color-secondary: #47ffff;
@@ -7,9 +10,9 @@
     --color-danger: #ff4747;
     
     /* Background colors */
-    --bg-dark: #1a1a1a;
+    --bg-dark: #12121e;
     --bg-darker: #0a0a0a;
-    --bg-panel: rgba(20, 20, 30, 0.95);
+    --bg-panel: rgba(20, 20, 30, 0.85);
     --bg-panel-hover: #3a3a4a;
     
     /* Text colors */
@@ -18,12 +21,13 @@
     --text-highlight: var(--color-primary);
     
     /* Glow effects */
-    --glow-primary: 0 0 10px var(--color-primary);
-    --glow-secondary: 0 0 10px var(--color-secondary);
+    --glow-primary: 0 0 5px var(--color-primary), 0 0 10px var(--color-primary);
+    --glow-secondary: 0 0 5px var(--color-secondary), 0 0 10px var(--color-secondary);
+    --glow-accent: 0 0 5px var(--color-accent), 0 0 10px var(--color-accent);
+    --glow-danger: 0 0 5px var(--color-danger), 0 0 10px var(--color-danger);
     
     /* Transitions */
     --transition-fast: 0.1s ease-in-out;
     --transition-medium: 0.2s ease-in-out;
     --transition-slow: 0.5s ease-out;
 }
-

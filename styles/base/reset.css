@@ -3,14 +3,14 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: var(--font-primary), 'Courier New', Courier, monospace;
 }
 
 body {
     margin: 0;
     padding: 0;
-    background-color: #1a1a1a;
-    color: #fafafa;
-    font-family: 'Courier New', Courier, monospace;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: var(--font-primary), 'Courier New', Courier, monospace;
     overflow: hidden;
 }
-

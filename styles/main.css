@@ -7,6 +7,7 @@
 @import url('components/minimap.css');
 @import url('components/modals.css');
 @import url('components/ui-elements.css');
+@import url('theme/cyberpunk.css');
 
 /* Any global utility classes */
 .hidden {
