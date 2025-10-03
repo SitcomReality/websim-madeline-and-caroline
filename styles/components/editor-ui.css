@@ -87,31 +87,6 @@
     color: var(--color-primary);
 }
 
-.editor-property-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-}
-
-.editor-property-row .editor-property.compact {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex: 1;
-}
-
-.editor-property .small-label, .editor-property-row .small-label {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    margin-bottom: 2px;
-}
-
-.editor-property-row input[type="number"],
-.editor-property .compact input[type="number"] {
-    padding: 6px;
-    font-size: 0.9rem;
-}
-
 .editor-property {
     margin-bottom: 15px;
 }

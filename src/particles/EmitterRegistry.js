@@ -1,3 +1,7 @@
+import ParticleEmitter from '../ParticleEmitter.js';
+import AestheticParticle from '../AestheticParticle.js';
+import PhysicalParticle from '../PhysicalParticle.js';
+
 export default class EmitterRegistry {
     constructor(manager) {
         this.manager = manager;
@@ -13,14 +17,7 @@ export default class EmitterRegistry {
     }
 
     getAvailableEmitterTypes() {
-        const exclude = new Set([
-            'character_switch',
-            'madeline_dash',
-            'caroline_dash',
-            'player_death_burst',
-            'generic_aesthetic',
-            'generic_physical'
-        ]);
-        return Array.from(this.emitters.keys()).filter(n => !exclude.has(n));
+        // User requested all particle types to be available in the editor properties panel.
+        return Array.from(this.emitters.keys());
     }
 }
