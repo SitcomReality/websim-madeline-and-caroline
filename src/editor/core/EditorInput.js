@@ -12,6 +12,9 @@ export default class EditorInput {
     }
 
     setupEventListeners() {
+        if (!this.canvas) { this.canvas = this.editorManager?.game?.canvas; }
+        if (!this.canvas) { console.warn('EditorInput: canvas not available'); return; }
+        
         this.canvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
         this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
         this.canvas.addEventListener('mouseup', this.handleMouseUp.bind(this));
