@@ -14,6 +14,7 @@ export default class PlayerController extends Component {
         this.canIgnite = true;
         this.movementState = null;
         this.characterController = null;
+        this.fuelController = null;
         
         // Handlers
         this.movementHandler = null;
@@ -30,6 +31,7 @@ export default class PlayerController extends Component {
         }
         
         this.characterController = this.gameObject.getComponent('CharacterController');
+        this.fuelController = this.gameObject.getComponent('FuelController');
         
         // Initialize handlers
         this.movementHandler = new MovementHandler(this);
@@ -52,7 +54,7 @@ export default class PlayerController extends Component {
         if (!physics) return;
         
         // Ensure components are initialized
-        if (!this.movementState || !this.characterController) {
+        if (!this.movementState || !this.characterController || !this.fuelController) {
             this.init();
         }
         
@@ -68,9 +70,42 @@ export default class PlayerController extends Component {
         
         // Pyromania controls
         this.pyromaniaHandler.update(deltaTime);
+        
+        this.handleCollisions();
     }
     
     dash(dirX, dirY) {
         this.dashHandler.dash(dirX, dirY);
+    }
+    
+    handleCollisions() {
+        const transform = this.gameObject.transform;
+        const fuelCans = this.gameObject.scene?.gameObjects.filter(go => go.name === 'FuelCan' && !go._destroyed) || [];
+
+        for (const can of fuelCans) {
+            const canTransform = can.transform;
+            if (
+                transform.position.x < canTransform.position.x + canTransform.size.x &&
+                transform.position.x + transform.size.x > canTransform.position.x &&
+                transform.position.y < canTransform.position.y + canTransform.size.y &&
+                transform.position.y + transform.size.y > canTransform.position.y
+            ) {
+                this.collectFuelCan(can);
+            }
+        }
+    }
+    
+    collectFuelCan(can) {
+        can.destroy();
+        this.fuelController?.addFuel(50);
+
+        const particleSystem = this.gameObject.scene?.particleSystem;
+        if (particleSystem) {
+            const transform = can.transform;
+            particleSystem.emit('fuel_collect', {
+                x: transform.position.x + transform.size.x / 2,
+                y: transform.position.y + transform.size.y / 2
+            });
+        }
     }
 }

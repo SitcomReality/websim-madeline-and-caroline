@@ -6,6 +6,7 @@ export default class Transform extends Component {
         super();
         this.position = new Vector2(x, y);
         this.size = new Vector2(width, height);
+        this.lastDirection = 1; // 1 for right, -1 for left
     }
 }
 

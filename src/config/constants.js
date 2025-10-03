@@ -11,4 +11,4 @@ export const PLAYER_JUMP_FORCE = 500;
 export const FIRE_SPREAD_RATE = 0.3;
 export const FIRE_DAMAGE = 25;
 export const FUEL_BURN_TIME = 5; // seconds
-
+export const FUEL_SPRAY_RATE = 20; // units per second

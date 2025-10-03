@@ -1,6 +1,7 @@
 import ParticleManager from 'game/particles/ParticleManager';
 import ParticleEmitter from 'game/particles/ParticleEmitter';
 import AestheticParticle from 'game/particles/AestheticParticle';
+import PhysicalParticle from 'game/particles/PhysicalParticle';
 
 export default class ParticleSystem {
     constructor() {
@@ -62,6 +63,34 @@ export default class ParticleSystem {
             endColor: [71, 255, 255, 0]
         });
         this.emitters.set('caroline_dash', carolineDash);
+        
+        // Fuel can collect emitter
+        const fuelCollect = new ParticleEmitter(this.manager, AestheticParticle, {
+            count: 25,
+            angle: { min: 0, max: 360 },
+            speed: { min: 80, max: 200 },
+            lifetime: { min: 0.3, max: 0.7 },
+            startSize: { min: 2, max: 5 },
+            endSize: 0,
+            startColor: [255, 255, 71, 1],
+            endColor: [255, 255, 71, 0]
+        });
+        this.emitters.set('fuel_collect', fuelCollect);
+        
+        // Gasoline spray emitter
+        const gasolineSpray = new ParticleEmitter(this.manager, PhysicalParticle, {
+            count: 2,
+            lifetime: { min: 2.0, max: 4.0 },
+            speed: { min: 200, max: 250 },
+            startSize: { min: 2, max: 4 },
+            endSize: 1,
+            startColor: [200, 180, 220, 0.8],
+            endColor: [150, 120, 170, 0.5],
+            bounciness: 0.2,
+            friction: 0.9,
+            ay: 500 // Gravity
+        });
+        this.emitters.set('gasoline_spray', gasolineSpray);
     }
 
     emit(emitterName, options) {

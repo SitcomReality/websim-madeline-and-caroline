@@ -9,6 +9,7 @@ import { createFuelCan } from '../entities/FuelCan.js';
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../config/constants.js';
 import InGameMenu from '../ui/InGameMenu.js';
 import CharacterDisplay from '../ui/CharacterDisplay.js';
+import GasolineMeter from '../ui/GasolineMeter.js';
 
 export default class GameScene extends Scene {
     init(params = {}) {
@@ -26,6 +27,10 @@ export default class GameScene extends Scene {
         const characterController = player.getComponent('CharacterController');
         this.characterDisplay = new CharacterDisplay(characterController);
         this.characterDisplay.init(uiContainer);
+
+        const fuelController = player.getComponent('FuelController');
+        this.gasolineMeter = new GasolineMeter(fuelController);
+        this.gasolineMeter.init(uiContainer);
         
         if (this.level?.settings?.gravity != null) {
             const phys = player.getComponent('Physics');
@@ -69,6 +74,7 @@ export default class GameScene extends Scene {
     destroy() {
         if (this.menu) this.menu.destroy();
         if (this.characterDisplay) this.characterDisplay.destroy();
+        if (this.gasolineMeter) this.gasolineMeter.destroy();
         super.destroy();
     }
 }

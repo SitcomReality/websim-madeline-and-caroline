@@ -4,6 +4,7 @@ import Physics from 'game/ecs/components/Physics';
 import SpriteRenderer from 'game/ecs/components/SpriteRenderer';
 import PlayerController from 'game/ecs/components/PlayerController';
 import CharacterController from 'game/ecs/components/CharacterController';
+import FuelController from 'game/ecs/components/player/FuelController';
 import { GRAVITY, FIRE_DAMAGE } from 'game/config/constants';
 
 export function createPlayer(x, y) {
@@ -18,6 +19,7 @@ export function createPlayer(x, y) {
     player.addComponent(new SpriteRenderer('#ff47ab')); // Default color
     player.addComponent(new PlayerController());
     player.addComponent(new CharacterController());
+    player.addComponent(new FuelController());
     
     // Add fire immunity for pyromania gameplay
     const phys = player.getComponent('Physics');
