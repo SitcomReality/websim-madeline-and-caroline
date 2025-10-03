@@ -167,6 +167,20 @@ export default class GameScene extends Scene {
         if (this.ended) return;
         this.ended = true;
         this.menu?.hideButton();
+
+        // If player exists, emit a color-matched death burst and remove the player object
+        if (this.playerRef && !this.playerRef._destroyed) {
+            const renderer = this.playerRef.getComponent('SpriteRenderer');
+            const characterController = this.playerRef.getComponent('CharacterController');
+            const charColor = characterController?.activeCharacter?.color || renderer?.color || '#ffffff';
+            this.particleSystem?.emit('player_death_burst', {
+                x: this.playerRef.transform.position.x + this.playerRef.transform.size.x / 2,
+                y: this.playerRef.transform.position.y + this.playerRef.transform.size.y / 2,
+                color: charColor
+            });
+            this.playerRef.destroy();
+        }
+
         this.endScreen.open('dead');
     }
 
