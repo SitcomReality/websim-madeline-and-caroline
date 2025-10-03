@@ -123,14 +123,11 @@ export default class PlayerController extends Component {
 
     die() {
         console.log("Player died!");
-        // For now, just reload the level.
-        const level = this.gameObject.scene?.level;
-        this.gameObject.scene?.game.sceneManager.changeScene('game', { level });
+        this.gameObject.scene?.onPlayerDeath();
     }
 
     levelComplete() {
         console.log("Level Complete!");
-        // For now, return to splash screen
-        this.gameObject.scene?.game.sceneManager.changeScene('splash');
+        this.gameObject.scene?.onLevelComplete();
     }
 }

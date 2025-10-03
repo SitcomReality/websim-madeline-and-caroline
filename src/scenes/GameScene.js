@@ -16,6 +16,7 @@ import CharacterDisplay from '../ui/CharacterDisplay.js';
 import GasolineMeter from '../ui/GasolineMeter.js';
 import Camera from '../core/Camera.js';
 import Minimap from 'game/ui/Minimap';
+import EndScreen from '../ui/EndScreen.js';
 
 export default class GameScene extends Scene {
     init(params = {}) {
@@ -31,6 +32,8 @@ export default class GameScene extends Scene {
         const uiContainer = document.getElementById('game-ui');
         this.menu = new InGameMenu(this.game, document.getElementById('menu-button'));
         this.menu.showButton();
+        this.endScreen = new EndScreen(this);
+        this.ended = false;
 
         // Determine player start position from level data
         const playerStart = this.level?.entities?.find(e => e.type === 'player_start');
@@ -113,6 +116,14 @@ export default class GameScene extends Scene {
         this.physicsSystem.update(this.gameObjects, deltaTime);
         this.particleSystem.update(deltaTime, this.gameObjects);
         this.camera.update(deltaTime);
+        // Instant death if player leaves map bounds
+        if (!this.ended && this.playerRef?.transform) {
+            const t = this.playerRef.transform;
+            const w = this.camera.worldBounds.x, h = this.camera.worldBounds.y;
+            if (t.position.x < 0 || t.position.y < 0 || (t.position.x + t.size.x) > w || (t.position.y + t.size.y) > h) {
+                this.onPlayerDeath();
+            }
+        }
         // Update minimap render
         const playerColor = this.playerRef?.getComponent('SpriteRenderer')?.color || '#ffffff';
         this.minimap?.render(this.gameObjects, playerColor);
@@ -138,6 +149,30 @@ export default class GameScene extends Scene {
         if (this.characterDisplay) this.characterDisplay.destroy();
         if (this.gasolineMeter) this.gasolineMeter.destroy();
         if (this.minimap) this.minimap.destroy();
+        this.endScreen?.close();
         super.destroy();
+    }
+
+    onPlayerDeath() {
+        if (this.ended) return;
+        this.ended = true;
+        this.menu?.hideButton();
+        this.endScreen.open('dead');
+    }
+
+    onLevelComplete() {
+        if (this.ended) return;
+        this.ended = true;
+        this.menu?.hideButton();
+        this.endScreen.open('win');
+    }
+
+    retryLevel() {
+        const lvl = this.level ? { level: this.level } : {};
+        this.game.sceneManager.changeScene('game', lvl);
+    }
+
+    returnToMenu() {
+        this.game.sceneManager.changeScene('splash');
     }
 }
