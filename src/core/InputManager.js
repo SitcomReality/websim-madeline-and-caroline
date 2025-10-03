@@ -12,5 +12,5 @@ class InputManager {
 }
 
 // Singleton instance
-export default new InputManager();
-
+const inputManager = new InputManager();
+export default inputManager;

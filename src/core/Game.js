@@ -13,7 +13,7 @@ class Game {
         this.canvas.height = SCREEN_HEIGHT;
 
         this.sceneManager = new SceneManager();
-        this.inputManager = new InputManager();
+        this.inputManager = InputManager;
         this.gameLoop = new GameLoop(this.update.bind(this), this.draw.bind(this));
     }
 
@@ -36,4 +36,3 @@ class Game {
 }
 
 export default Game;
-
