@@ -1,9 +1,9 @@
-import GameObject from './GameObject.js';
-import Transform from '../ecs/components/Transform.js';
-import Physics from '../ecs/components/Physics.js';
-import SpriteRenderer from '../ecs/components/SpriteRenderer.js';
-import PlayerController from '../ecs/components/PlayerController.js';
-import { GRAVITY, FIRE_DAMAGE } from '../config/constants.js';
+import GameObject from 'game/ecs/GameObject';
+import Transform from 'game/ecs/components/Transform';
+import Physics from 'game/ecs/components/Physics';
+import SpriteRenderer from 'game/ecs/components/SpriteRenderer';
+import PlayerController from 'game/ecs/components/PlayerController';
+import { GRAVITY, FIRE_DAMAGE } from 'game/config/constants';
 
 export function createPlayer(x, y) {
     const player = new GameObject('Player');
