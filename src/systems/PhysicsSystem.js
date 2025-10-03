@@ -4,6 +4,7 @@ export default class PhysicsSystem {
     update(gameObjects, deltaTime) {
         const physicsEntities = gameObjects.filter(go => go.getComponent('Physics'));
         const colliders = gameObjects.filter(go => go.name === 'Platform');
+        const ramps = gameObjects.filter(go => go.name === 'Ramp');
 
         for (const entity of physicsEntities) {
             const physics = entity.getComponent('Physics');
@@ -35,7 +36,33 @@ export default class PhysicsSystem {
                     }
                 }
             }
+
+            // Ramp collision detection
+            for (const ramp of ramps) {
+                const rampTransform = ramp.transform;
+                const rampAngle = ramp.angle || 45; // TODO: handle different ramp directions
+
+                const footX = transform.position.x + transform.size.x / 2;
+                const footY = transform.position.y + transform.size.y;
+
+                if (
+                    footX >= rampTransform.position.x &&
+                    footX <= rampTransform.position.x + rampTransform.size.x &&
+                    footY >= rampTransform.position.y &&
+                    footY <= rampTransform.position.y + rampTransform.size.y + 10 // buffer
+                ) {
+                    const relativeX = footX - rampTransform.position.x;
+                    const rampHeightAtX = relativeX * Math.tan(rampAngle * Math.PI / 180);
+                    const rampSurfaceY = rampTransform.position.y + rampTransform.size.y - rampHeightAtX;
+                    
+                    if (footY >= rampSurfaceY) {
+                         // A simple approximation. More robust physics would be needed for perfect sliding.
+                        transform.position.y = rampSurfaceY - transform.size.y;
+                        physics.velocity.y = 0;
+                        physics.onGround = true;
+                    }
+                }
+            }
         }
     }
 }
-

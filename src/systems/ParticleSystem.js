@@ -91,6 +91,30 @@ export default class ParticleSystem {
             ay: 500 // Gravity
         });
         this.emitters.set('gasoline_spray', gasolineSpray);
+
+        // Generic emitters for level objects
+        const genericAesthetic = new ParticleEmitter(this.manager, AestheticParticle, {
+            count: 1,
+            lifetime: { min: 0.5, max: 1.5 },
+            speed: { min: 10, max: 30 },
+            angle: {min: -120, max: -60},
+            startSize: { min: 2, max: 4 },
+            endSize: 0
+        });
+        this.emitters.set('generic_aesthetic', genericAesthetic);
+
+        const genericPhysical = new ParticleEmitter(this.manager, PhysicalParticle, {
+            count: 1,
+            lifetime: { min: 1, max: 2 },
+            speed: { min: 10, max: 30 },
+            angle: {min: -120, max: -60},
+            startSize: { min: 2, max: 4 },
+            endSize: 1,
+            bounciness: 0.3,
+            friction: 0.95,
+            ay: 400
+        });
+        this.emitters.set('generic_physical', genericPhysical);
     }
 
     emit(emitterName, options) {

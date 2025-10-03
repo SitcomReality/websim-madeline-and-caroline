@@ -80,17 +80,29 @@ export default class PlayerController extends Component {
     
     handleCollisions() {
         const transform = this.gameObject.transform;
-        const fuelCans = this.gameObject.scene?.gameObjects.filter(go => go.name === 'FuelCan' && !go._destroyed) || [];
+        const physics = this.gameObject.getComponent('Physics');
 
-        for (const can of fuelCans) {
-            const canTransform = can.transform;
+        // Check against all collidable game objects
+        for (const other of this.gameObject.scene?.gameObjects || []) {
+            if (other === this.gameObject || other._destroyed) continue;
+
+            const otherTransform = other.transform;
+            if (!otherTransform) continue;
+
             if (
-                transform.position.x < canTransform.position.x + canTransform.size.x &&
-                transform.position.x + transform.size.x > canTransform.position.x &&
-                transform.position.y < canTransform.position.y + canTransform.size.y &&
-                transform.position.y + transform.size.y > canTransform.position.y
+                transform.position.x < otherTransform.position.x + otherTransform.size.x &&
+                transform.position.x + transform.size.x > otherTransform.position.x &&
+                transform.position.y < otherTransform.position.y + otherTransform.size.y &&
+                transform.position.y + transform.size.y > otherTransform.position.y
             ) {
-                this.collectFuelCan(can);
+                // Collision detected, handle based on other's name/type
+                if (other.name === 'FuelCan') {
+                    this.collectFuelCan(other);
+                } else if (other.name === 'ExitDoor') {
+                    this.levelComplete();
+                } else if (other.name === 'Platform' && other.killsPlayer && physics.onGround) {
+                    this.die();
+                }
             }
         }
     }
@@ -107,5 +119,18 @@ export default class PlayerController extends Component {
                 y: transform.position.y + transform.size.y / 2
             });
         }
+    }
+
+    die() {
+        console.log("Player died!");
+        // For now, just reload the level.
+        const level = this.gameObject.scene?.level;
+        this.gameObject.scene?.game.sceneManager.changeScene('game', { level });
+    }
+
+    levelComplete() {
+        console.log("Level Complete!");
+        // For now, return to splash screen
+        this.gameObject.scene?.game.sceneManager.changeScene('splash');
     }
 }
