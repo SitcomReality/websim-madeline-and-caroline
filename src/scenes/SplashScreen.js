@@ -1,6 +1,7 @@
 import Scene from 'game/scenes/Scene';
 import LocalStorageManager from 'game/editor/serialization/LocalStorageManager';
 import LevelSerializer from 'game/editor/serialization/LevelSerializer';
+import { BUNDLED_MAPS, fetchLevelData } from 'game/utils/levelLoader';
 
 export default class SplashScreen extends Scene {
     constructor(game) {
@@ -43,29 +44,73 @@ export default class SplashScreen extends Scene {
         const title = document.createElement('h2');
         title.textContent = 'Choose Map';
         modal.appendChild(title);
-        const levels = this.storage.listLevels();
-        if (levels.length === 0) {
+
+        const localStorageLevels = this.storage.listLevels().map(name => ({
+            name, 
+            type: 'local'
+        }));
+        
+        const allLevels = [
+            ...BUNDLED_MAPS.map(map => ({ ...map, type: 'bundled' })),
+            ...localStorageLevels
+        ];
+
+        if (allLevels.length === 0) {
             const p = document.createElement('p');
             p.textContent = 'No saved levels found.';
             modal.appendChild(p);
         } else {
             const list = document.createElement('ul');
             list.className = 'level-list';
-            levels.forEach(name => {
+            
+            allLevels.forEach(level => {
                 const item = document.createElement('li');
                 item.className = 'level-list-item';
-                const span = document.createElement('span');
-                span.textContent = name;
-                span.onclick = () => this.loadLevelAndStart(name);
-                const del = document.createElement('button');
-                del.textContent = '✕';
-                del.onclick = (e) => { e.stopPropagation(); if (confirm(`Delete "${name}"?`)) { this.storage.deleteLevel(name); this.openLoadModal(); } };
-                const edit = document.createElement('button');
-                edit.textContent = 'Edit';
-                edit.onclick = (e) => { e.stopPropagation(); this.loadLevelAndEdit(name); };
-                item.appendChild(span);
-                item.appendChild(edit);
-                item.appendChild(del);
+                
+                if (level.type === 'bundled') {
+                    item.classList.add('bundled-map');
+                }
+
+                item.onclick = (e) => {
+                    // If click target is a button, let the button handler manage it.
+                    if (e.target.tagName === 'BUTTON') {
+                        return; 
+                    }
+                    
+                    if (level.type === 'local') {
+                        this.loadLevelAndStart(level.name);
+                    } else if (level.type === 'bundled') {
+                        this.loadBundledLevelAndStart(level.path);
+                    }
+                };
+
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = level.name;
+                nameSpan.classList.add('level-name-span');
+                item.appendChild(nameSpan);
+
+                if (level.type === 'local') {
+                    const edit = document.createElement('button');
+                    edit.textContent = 'Edit';
+                    edit.onclick = (e) => { e.stopPropagation(); this.loadLevelAndEdit(level.name); };
+                    
+                    const del = document.createElement('button');
+                    del.textContent = '✕';
+                    del.onclick = (e) => { e.stopPropagation(); if (confirm(`Delete "${level.name}"?`)) { this.storage.deleteLevel(level.name); this.openLoadModal(); } };
+                    
+                    item.appendChild(edit);
+                    item.appendChild(del);
+                    
+                } else if (level.type === 'bundled') {
+                    const indicator = document.createElement('span');
+                    indicator.textContent = '[Built-in]';
+                    indicator.style.fontSize = '0.75rem';
+                    indicator.style.color = 'var(--color-secondary)';
+                    indicator.style.paddingLeft = '10px';
+                    indicator.style.flexShrink = 0;
+                    item.appendChild(indicator);
+                }
+
                 list.appendChild(item);
             });
             modal.appendChild(list);
@@ -79,6 +124,18 @@ export default class SplashScreen extends Scene {
         modal.appendChild(actions);
         document.getElementById('game-container').appendChild(modal);
         this.modalEl = modal;
+    }
+
+    async loadBundledLevelAndStart(path) {
+        if (this.modalEl) { this.modalEl.remove(); this.modalEl = null; }
+        
+        const levelState = await fetchLevelData(path);
+        if (levelState) {
+            this.startGameWithLevel(levelState);
+        } else {
+            alert("Failed to load map.");
+            this.openLoadModal(); 
+        }
     }
 
     loadLevelAndStart(name) {

@@ -1,6 +1,7 @@
 import UIComponent from '../../ui/UIComponent.js';
 import LevelSerializer from 'game/editor/serialization/LevelSerializer';
 import LocalStorageManager from 'game/editor/serialization/LocalStorageManager';
+import { BUNDLED_MAPS, fetchLevelData } from 'game/utils/levelLoader';
 
 export default class SaveLoadPanel extends UIComponent {
     constructor(editorUI) {
@@ -94,9 +95,18 @@ export default class SaveLoadPanel extends UIComponent {
     }
 
     createLoadUI() {
-        const levels = this.storage.listLevels();
+        const localStorageLevels = this.storage.listLevels().map(name => ({
+            name, 
+            type: 'local',
+            id: name
+        }));
+        
+        const allLevels = [
+            ...BUNDLED_MAPS.map(map => ({ ...map, type: 'bundled', id: map.path, path: map.path })),
+            ...localStorageLevels
+        ];
 
-        if (levels.length === 0) {
+        if (allLevels.length === 0) {
             const message = document.createElement('p');
             message.textContent = 'No saved levels found.';
             this.element.appendChild(message);
@@ -104,26 +114,67 @@ export default class SaveLoadPanel extends UIComponent {
             const list = document.createElement('ul');
             list.className = 'level-list';
 
-            levels.forEach(levelName => {
+            allLevels.forEach(level => {
                 const item = document.createElement('li');
                 item.className = 'level-list-item';
                 
-                const nameSpan = document.createElement('span');
-                nameSpan.textContent = levelName;
-                nameSpan.onclick = () => this.loadLevel(levelName);
+                if (level.type === 'bundled') {
+                    item.classList.add('bundled-map');
+                }
                 
-                const deleteBtn = document.createElement('button');
-                deleteBtn.textContent = '✕';
-                deleteBtn.onclick = (e) => {
-                    e.stopPropagation();
-                    if (confirm(`Delete "${levelName}"?`)) {
-                        this.storage.deleteLevel(levelName);
-                        this.createModal('load');
+                item.onclick = (e) => {
+                    // Prevent propagation if clicking action buttons (BUTTON)
+                    if (e.target.tagName === 'BUTTON') {
+                        return; 
+                    }
+
+                    if (level.type === 'local') {
+                        this.loadLevel(level.name);
+                    } else if (level.type === 'bundled') {
+                        this.loadBundledLevel(level.path);
                     }
                 };
-
+                
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = level.name;
+                nameSpan.classList.add('level-name-span');
                 item.appendChild(nameSpan);
-                item.appendChild(deleteBtn);
+
+
+                if (level.type === 'local') {
+                    // Action buttons only for local storage maps
+                    const loadBtn = document.createElement('button');
+                    loadBtn.textContent = 'Load';
+                    loadBtn.onclick = (e) => { e.stopPropagation(); this.loadLevel(level.name); };
+                    
+                    const del = document.createElement('button');
+                    del.textContent = '✕';
+                    del.onclick = (e) => {
+                        e.stopPropagation();
+                        if (confirm(`Delete "${level.name}"?`)) {
+                            this.storage.deleteLevel(level.name);
+                            this.createModal('load');
+                        }
+                    };
+
+                    item.appendChild(loadBtn);
+                    item.appendChild(del);
+                } else if (level.type === 'bundled') {
+                    const indicator = document.createElement('span');
+                    indicator.textContent = '[Built-in]';
+                    indicator.style.fontSize = '0.75rem';
+                    indicator.style.color = 'var(--color-secondary)';
+                    indicator.style.paddingLeft = '10px';
+                    indicator.style.flexShrink = 0;
+                    item.appendChild(indicator);
+                    
+                    const loadBtn = document.createElement('button');
+                    loadBtn.textContent = 'Load';
+                    loadBtn.onclick = (e) => { e.stopPropagation(); this.loadBundledLevel(level.path); };
+                    item.appendChild(loadBtn);
+                }
+
+
                 list.appendChild(item);
             });
 
@@ -155,8 +206,25 @@ export default class SaveLoadPanel extends UIComponent {
         if (data) {
             const state = this.serializer.deserialize(data);
             this.editorUI.editorManager.state.fromJSON(state);
+            this.editorUI.editorManager.state.levelSettings.name = name; // Ensure name is preserved
             this.editorUI.updateProperties();
             this.closeModal();
+        }
+    }
+    
+    async loadBundledLevel(path) {
+        const data = await fetchLevelData(path);
+        if (data) {
+            this.editorUI.editorManager.state.fromJSON(data);
+            // Bundled levels are loaded into memory and can be saved with their name
+            const mapInfo = BUNDLED_MAPS.find(m => m.path === path);
+            if (mapInfo) {
+                this.editorUI.editorManager.state.levelSettings.name = mapInfo.name;
+            }
+            this.editorUI.updateProperties();
+            this.closeModal();
+        } else {
+            alert("Failed to load bundled map.");
         }
     }
 
