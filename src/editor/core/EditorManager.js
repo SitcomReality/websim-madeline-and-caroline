@@ -3,6 +3,12 @@ import EditorState from 'game/editor/core/EditorState';
 import PlatformTool from 'game/editor/tools/PlatformTool';
 import SelectTool from 'game/editor/tools/SelectTool';
 import DeleteTool from 'game/editor/tools/DeleteTool';
+import FuelTool from 'game/editor/tools/FuelTool';
+import RampTool from 'game/editor/tools/RampTool';
+import EnemySpawnerTool from 'game/editor/tools/EnemySpawnerTool';
+import ParticleEmitterTool from 'game/editor/tools/ParticleEmitterTool';
+import PlayerStartTool from 'game/editor/tools/PlayerStartTool';
+import ExitDoorTool from 'game/editor/tools/ExitDoorTool';
 import InputManager from '../../core/InputManager.js';
 import Vector2 from '../../utils/Vector2.js';
 
@@ -16,7 +22,13 @@ export default class EditorManager {
         this.tools = {
             platform: new PlatformTool(this),
             select: new SelectTool(this),
-            delete: new DeleteTool(this)
+            delete: new DeleteTool(this),
+            fuel: new FuelTool(this),
+            ramp: new RampTool(this),
+            enemy_spawner: new EnemySpawnerTool(this),
+            particle_emitter: new ParticleEmitterTool(this),
+            player_start: new PlayerStartTool(this),
+            exit_door: new ExitDoorTool(this)
         };
         this.currentTool = this.tools.platform;
         this.canvas = game.canvas;
@@ -166,9 +178,45 @@ export default class EditorManager {
         ctx.fillStyle = entity.color;
         ctx.fillRect(entity.x, entity.y, entity.width, entity.height);
 
+        // Draw icon/label for special entity types
+        ctx.save();
+        ctx.font = '16px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const centerX = entity.x + entity.width / 2;
+        const centerY = entity.y + entity.height / 2;
+
+        if (entity.type === 'fuel') {
+            ctx.fillStyle = '#000';
+            ctx.fillText('⛽', centerX, centerY);
+        } else if (entity.type === 'ramp') {
+            // Draw triangle
+            ctx.fillStyle = entity.color;
+            ctx.beginPath();
+            const angle = (entity.angle || 45) * Math.PI / 180;
+            ctx.moveTo(entity.x, entity.y + entity.height);
+            ctx.lineTo(entity.x + entity.width, entity.y + entity.height);
+            ctx.lineTo(entity.x + entity.width, entity.y);
+            ctx.closePath();
+            ctx.fill();
+        } else if (entity.type === 'enemy_spawner') {
+            ctx.fillStyle = '#000';
+            ctx.fillText('👾', centerX, centerY);
+        } else if (entity.type === 'particle_emitter') {
+            ctx.fillStyle = '#000';
+            ctx.fillText('✨', centerX, centerY);
+        } else if (entity.type === 'player_start') {
+            ctx.fillStyle = '#000';
+            ctx.fillText('🎮', centerX, centerY);
+        } else if (entity.type === 'exit_door') {
+            ctx.fillStyle = '#000';
+            ctx.fillText('🚪', centerX, centerY);
+        }
+        ctx.restore();
+
         // Draw border
-        ctx.strokeStyle = '#47ffff';
-        ctx.lineWidth = 1;
+        ctx.strokeStyle = entity.killsPlayer ? '#ff0000' : '#47ffff';
+        ctx.lineWidth = entity.killsPlayer ? 2 : 1;
         ctx.strokeRect(entity.x, entity.y, entity.width, entity.height);
     }
 

@@ -48,8 +48,9 @@ export default class Camera {
     }
 
     clampToBounds() {
-        this.position.x = Math.max(0, Math.min(this.position.x, this.worldBounds.x - this.viewportSize.x));
-        this.position.y = Math.max(0, Math.min(this.position.y, this.worldBounds.y - this.viewportSize.y));
+        // Ensure camera can't go outside world bounds in any direction
+        this.position.x = Math.max(0, Math.min(this.position.x, Math.max(0, this.worldBounds.x - this.viewportSize.x)));
+        this.position.y = Math.max(0, Math.min(this.position.y, Math.max(0, this.worldBounds.y - this.viewportSize.y)));
     }
 
     applyTransform(ctx) {

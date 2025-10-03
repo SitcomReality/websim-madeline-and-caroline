@@ -8,8 +8,12 @@ export default class Toolbar extends UIComponent {
             { name: 'platform', label: 'Platform', icon: '▭' },
             { name: 'select', label: 'Select', icon: '⌖' },
             { name: 'delete', label: 'Delete', icon: '✕' },
-            { name: 'fire', label: 'Fire', icon: '🔥' },
-            { name: 'fuel', label: 'Fuel', icon: '⛽' }
+            { name: 'fuel', label: 'Fuel', icon: '⛽' },
+            { name: 'ramp', label: 'Ramp', icon: '◢' },
+            { name: 'enemy_spawner', label: 'Enemy', icon: '👾' },
+            { name: 'particle_emitter', label: 'Particles', icon: '✨' },
+            { name: 'player_start', label: 'Player Start', icon: '🎮' },
+            { name: 'exit_door', label: 'Exit', icon: '🚪' }
         ];
     }
 
@@ -54,4 +58,3 @@ export default class Toolbar extends UIComponent {
         });
     }
 }
-

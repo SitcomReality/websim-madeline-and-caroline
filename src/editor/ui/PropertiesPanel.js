@@ -30,9 +30,22 @@ export default class PropertiesPanel extends UIComponent {
             { label: 'Y Position', key: 'y', type: 'number' },
             { label: 'Width', key: 'width', type: 'number' },
             { label: 'Height', key: 'height', type: 'number' },
-            { label: 'Color', key: 'color', type: 'color' },
-            { label: 'Type', key: 'type', type: 'select', options: ['platform', 'obstacle', 'hazard', 'collectible'] }
+            { label: 'Color', key: 'color', type: 'color' }
         ];
+
+        // Add type-specific properties
+        if (entity.type === 'platform') {
+            properties.push({ label: 'Kills Player', key: 'killsPlayer', type: 'checkbox' });
+        } else if (entity.type === 'enemy_spawner') {
+            properties.push({ label: 'Enemy Type', key: 'enemyType', type: 'select', options: ['basic', 'flying', 'turret'] });
+            properties.push({ label: 'Spawn Interval', key: 'spawnInterval', type: 'number', step: 0.1 });
+        } else if (entity.type === 'particle_emitter') {
+            properties.push({ label: 'Particle Type', key: 'particleType', type: 'select', options: ['aesthetic', 'physical'] });
+            properties.push({ label: 'Emit Rate', key: 'emitRate', type: 'number' });
+            properties.push({ label: 'Particle Color', key: 'particleColor', type: 'color' });
+        } else if (entity.type === 'ramp') {
+            properties.push({ label: 'Angle', key: 'angle', type: 'number', step: 1 });
+        }
 
         properties.forEach(prop => {
             const div = document.createElement('div');
@@ -44,7 +57,7 @@ export default class PropertiesPanel extends UIComponent {
 
             if (prop.type === 'select') {
                 const select = document.createElement('select');
-                select.value = entity[prop.key] || 'platform';
+                select.value = entity[prop.key] || prop.options[0];
                 prop.options.forEach(opt => {
                     const option = document.createElement('option');
                     option.value = opt;
@@ -53,10 +66,17 @@ export default class PropertiesPanel extends UIComponent {
                 });
                 select.onchange = (e) => this.updateEntityProperty(entity, prop.key, e.target.value);
                 div.appendChild(select);
+            } else if (prop.type === 'checkbox') {
+                const input = document.createElement('input');
+                input.type = 'checkbox';
+                input.checked = entity[prop.key] || false;
+                input.onchange = (e) => this.updateEntityProperty(entity, prop.key, e.target.checked);
+                div.appendChild(input);
             } else {
                 const input = document.createElement('input');
                 input.type = prop.type;
-                input.value = entity[prop.key];
+                if (prop.step) input.step = prop.step;
+                input.value = entity[prop.key] !== undefined ? entity[prop.key] : (prop.type === 'number' ? 0 : '');
                 input.onchange = (e) => {
                     const value = prop.type === 'number' ? parseFloat(e.target.value) : e.target.value;
                     this.updateEntityProperty(entity, prop.key, value);
