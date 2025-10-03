@@ -51,6 +51,14 @@ export default class ParticleEmitter {
 
     getValue(configValue, overrideValue) {
         if (overrideValue !== undefined) {
+            if (typeof overrideValue === 'object' && overrideValue !== null) {
+                if (overrideValue.min !== undefined) {
+                    return overrideValue.min + Math.random() * (overrideValue.max - overrideValue.min);
+                }
+                if (Array.isArray(overrideValue)) {
+                    return [...overrideValue];
+                }
+            }
             return overrideValue;
         }
         if (typeof configValue === 'object' && configValue !== null) {
