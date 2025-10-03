@@ -4,6 +4,7 @@ import InputManager from 'game/core/InputManager';
 import SceneManager from 'game/scenes/SceneManager';
 import SplashScreen from 'game/scenes/SplashScreen';
 import GameScene from 'game/scenes/GameScene';
+import EditorScene from 'game/scenes/EditorScene';
 
 class Game {
     constructor() {
@@ -20,6 +21,7 @@ class Game {
     start() {
         this.sceneManager.addScene('splash', new SplashScreen(this));
         this.sceneManager.addScene('game', new GameScene(this));
+        this.sceneManager.addScene('editor', new EditorScene(this));
         this.sceneManager.changeScene('splash');
 
         this.gameLoop.start();

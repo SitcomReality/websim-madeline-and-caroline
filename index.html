@@ -25,9 +25,24 @@
             "game/scenes/SceneManager": "./src/scenes/SceneManager.js",
             "game/scenes/SplashScreen": "./src/scenes/SplashScreen.js",
             "game/scenes/GameScene": "./src/scenes/GameScene.js",
+            "game/scenes/EditorScene": "./src/scenes/EditorScene.js",
             "game/systems/Renderer": "./src/systems/Renderer.js",
             "game/systems/PhysicsSystem": "./src/systems/PhysicsSystem.js",
-            "game/utils/Vector2": "./src/utils/Vector2.js"
+            "game/utils/Vector2": "./src/utils/Vector2.js",
+            "game/editor/core/EditorManager": "./src/editor/core/EditorManager.js",
+            "game/editor/core/EditorState": "./src/editor/core/EditorState.js",
+            "game/editor/core/EditorHistory": "./src/editor/core/EditorHistory.js",
+            "game/editor/ui/EditorUI": "./src/editor/ui/EditorUI.js",
+            "game/editor/ui/Toolbar": "./src/editor/ui/Toolbar.js",
+            "game/editor/ui/PropertiesPanel": "./src/editor/ui/PropertiesPanel.js",
+            "game/editor/ui/BottomBar": "./src/editor/ui/BottomBar.js",
+            "game/editor/ui/SaveLoadPanel": "./src/editor/ui/SaveLoadPanel.js",
+            "game/editor/tools/Tool": "./src/editor/tools/Tool.js",
+            "game/editor/tools/PlatformTool": "./src/editor/tools/PlatformTool.js",
+            "game/editor/tools/SelectTool": "./src/editor/tools/SelectTool.js",
+            "game/editor/tools/DeleteTool": "./src/editor/tools/DeleteTool.js",
+            "game/editor/serialization/LevelSerializer": "./src/editor/serialization/LevelSerializer.js",
+            "game/editor/serialization/LocalStorageManager": "./src/editor/serialization/LocalStorageManager.js"
         }
     }
     </script>
@@ -40,7 +55,9 @@
             <h2>in:</h2>
             <h3>Masculine Gasoline Trampoline Discipline Decline</h3>
             <button id="start-game-btn">New Game</button>
+            <button id="map-editor-btn">Map Editor</button>
         </div>
+        <div id="editor-ui" class="hidden"></div>
     </div>
     <script type="module" src="main.js"></script>
     <script>

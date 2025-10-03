@@ -14,7 +14,11 @@ export default class GameObject {
     }
 
     getComponent(componentClass) {
-        return this.components.find(c => c.constructor.name === componentClass.name);
+        // Handle both string and class references
+        const className = typeof componentClass === 'string' 
+            ? componentClass 
+            : componentClass.name;
+        return this.components.find(c => c.constructor.name === className);
     }
 
     update(deltaTime) {
