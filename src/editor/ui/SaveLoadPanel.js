@@ -55,7 +55,7 @@ export default class SaveLoadPanel extends UIComponent {
         this.element.className = 'save-load-modal';
 
         const title = document.createElement('h2');
-        title.textContent = mode === 'save' ? 'Save Level' : 'Load Level';
+        title.textContent = mode === 'save' ? 'Save Level' : 'Choose Map';
         this.element.appendChild(title);
 
         if (mode === 'save') {
