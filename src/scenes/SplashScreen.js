@@ -6,7 +6,6 @@ export default class SplashScreen extends Scene {
     constructor(game) {
         super(game);
         this.splashElement = document.getElementById('splash-screen');
-        this.startButton = document.getElementById('start-game-btn');
         this.editorButton = document.getElementById('map-editor-btn');
         this.loadButton = document.getElementById('load-map-btn');
         this.storage = new LocalStorageManager();
@@ -17,7 +16,6 @@ export default class SplashScreen extends Scene {
     init() {
         this.splashElement.classList.remove('hidden');
         document.getElementById('menu-button').classList.add('hidden');
-        this.startButton.onclick = () => this.startGame();
         this.editorButton.onclick = () => this.openEditor();
         this.loadButton.onclick = () => this.openLoadModal();
     }
@@ -33,7 +31,6 @@ export default class SplashScreen extends Scene {
     }
 
     destroy() {
-        this.startButton.onclick = null;
         this.editorButton.onclick = null;
         this.loadButton.onclick = null;
         if (this.modalEl) this.modalEl.remove();
