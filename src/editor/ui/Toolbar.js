@@ -22,6 +22,17 @@ export default class Toolbar {
             this.element.appendChild(button);
         });
 
+        // Snap toggle button
+        const snapBtn = document.createElement('button');
+        snapBtn.className = 'editor-tool-btn snap-toggle';
+        snapBtn.textContent = '🔳 Snap: ON';
+        snapBtn.onclick = () => {
+            const mgr = this.editorUI.editorManager;
+            mgr.snapToGrid = !mgr.snapToGrid;
+            snapBtn.textContent = `🔳 Snap: ${mgr.snapToGrid ? 'ON' : 'OFF'}`;
+        };
+        this.element.appendChild(snapBtn);
+
         this.editorUI.container.appendChild(this.element);
         this.updateSelection('platform');
     }
@@ -41,4 +52,3 @@ export default class Toolbar {
         });
     }
 }
-

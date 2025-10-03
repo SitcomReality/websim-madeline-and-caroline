@@ -55,8 +55,15 @@ export default class SelectTool extends Tool {
             if (selected) {
                 const dx = x - this.dragStartX;
                 const dy = y - this.dragStartY;
-                selected.x = this.entityStartX + dx;
-                selected.y = this.entityStartY + dy;
+                let newX = this.entityStartX + dx;
+                let newY = this.entityStartY + dy;
+                if (this.editorManager.snapToGrid) {
+                    const gs = this.editorManager.gridSize || 20;
+                    newX = Math.round(newX / gs) * gs;
+                    newY = Math.round(newY / gs) * gs;
+                }
+                selected.x = newX;
+                selected.y = newY;
             }
         }
     }

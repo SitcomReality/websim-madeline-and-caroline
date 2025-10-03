@@ -8,10 +8,11 @@ export default class PlatformTool extends Tool {
         this.startY = 0;
         this.currentX = 0;
         this.currentY = 0;
-        this.gridSize = 20;
+        this.gridSize = this.editorManager.gridSize || 20;
     }
 
     snapToGrid(value) {
+        if (!this.editorManager.snapToGrid) return value;
         return Math.round(value / this.gridSize) * this.gridSize;
     }
 

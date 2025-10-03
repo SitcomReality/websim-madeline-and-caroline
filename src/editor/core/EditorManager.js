@@ -17,6 +17,8 @@ export default class EditorManager {
         };
         this.currentTool = this.tools.platform;
         this.canvas = game.canvas;
+        this.snapToGrid = true; // default snap enabled
+        this.gridSize = 20;
     }
 
     init() {
