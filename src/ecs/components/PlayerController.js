@@ -102,6 +102,8 @@ export default class PlayerController extends Component {
                     this.levelComplete();
                 } else if (other.name === 'Platform' && other.killsPlayer && physics.onGround) {
                     this.die();
+                } else if (other.name === 'Enemy') {
+                    this.die();
                 }
             }
         }
@@ -122,8 +124,18 @@ export default class PlayerController extends Component {
     }
 
     die() {
-        console.log("Player died!");
-        this.gameObject.scene?.onPlayerDeath();
+        const scene = this.gameObject.scene;
+        if (!scene || scene.ended) return;
+        const transform = this.gameObject.transform;
+        const renderer = this.gameObject.getComponent('SpriteRenderer');
+        const charColor = this.characterController?.activeCharacter?.color || renderer?.color || '#ffffff';
+        scene.particleSystem?.emit('player_death_burst', {
+            x: transform.position.x + transform.size.x / 2,
+            y: transform.position.y + transform.size.y / 2,
+            color: charColor
+        });
+        this.gameObject.destroy();
+        scene.onPlayerDeath();
     }
 
     levelComplete() {

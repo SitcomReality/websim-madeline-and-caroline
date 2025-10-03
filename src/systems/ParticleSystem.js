@@ -115,6 +115,17 @@ export default class ParticleSystem {
             ay: 400
         });
         this.emitters.set('generic_physical', genericPhysical);
+
+        // Player death burst (color-matched)
+        const playerDeathBurst = new ParticleEmitter(this.manager, AestheticParticle, {
+            count: 180,
+            angle: { min: 0, max: 360 },
+            speed: { min: 150, max: 400 },
+            lifetime: { min: 0.6, max: 1.2 },
+            startSize: { min: 1, max: 3 },
+            endSize: 0
+        });
+        this.emitters.set('player_death_burst', playerDeathBurst);
     }
 
     emit(emitterName, options) {
