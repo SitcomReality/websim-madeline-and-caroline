@@ -6,12 +6,17 @@ export default class PhysicalParticle extends Particle {
         super();
         this.bounciness = 0.5;
         this.friction = 0.98;
+        this.prevPosition = { x: 0, y: 0 };
     }
 
     init(options) {
         super.init(options);
         this.bounciness = options.bounciness !== undefined ? options.bounciness : 0.5;
         this.friction = options.friction !== undefined ? options.friction : 0.98;
+        
+        // Store initial position
+        this.prevPosition.x = this.position.x;
+        this.prevPosition.y = this.position.y;
 
         // Physical particles are affected by gravity by default
         if (options.ay === undefined) {
@@ -20,6 +25,13 @@ export default class PhysicalParticle extends Particle {
     }
 
     update(deltaTime, colliders = []) {
+        if (!this.active) return;
+
+        // Store position before updating
+        this.prevPosition.x = this.position.x;
+        this.prevPosition.y = this.position.y;
+        
+        // Update velocity and position
         super.update(deltaTime);
         if (!this.active) return;
 
@@ -27,24 +39,37 @@ export default class PhysicalParticle extends Particle {
 
         // Collision detection with platforms and ramps
         for (const collider of colliders) {
+            if (!collider.transform) continue;
+            
             const colTransform = collider.transform;
             const p = this.position;
             const v = this.velocity;
-            const prevY = p.y - v.y * deltaTime;
 
             if (collider.name === 'Platform') {
-                if (p.x >= colTransform.position.x &&
-                    p.x <= colTransform.position.x + colTransform.size.x &&
-                    prevY <= colTransform.position.y &&
-                    p.y >= colTransform.position.y) {
+                // Check if particle is within horizontal bounds
+                if (p.x >= colTransform.position.x - 2 &&
+                    p.x <= colTransform.position.x + colTransform.size.x + 2) {
                     
-                    p.y = colTransform.position.y;
-                    v.y *= -this.bounciness; // Bounce
-                    v.x *= this.friction;    // Apply friction
-                    onSurface = true;
+                    const platformTop = colTransform.position.y;
+                    const platformBottom = colTransform.position.y + colTransform.size.y;
+                    
+                    // Check if particle crossed through platform from above
+                    if (this.prevPosition.y <= platformTop && p.y > platformTop && p.y < platformBottom + 10) {
+                        // Collision! Place particle on top of platform
+                        p.y = platformTop;
+                        v.y *= -this.bounciness;
+                        v.x *= this.friction;
+                        onSurface = true;
+                        
+                        // If bounce is small, stop bouncing
+                        if (Math.abs(v.y) < 10) {
+                            v.y = 0;
+                            this.acceleration.y = 0;
+                        }
+                    }
                 }
             } else if (collider.name === 'Ramp') {
-                 // Simple bounding box check first
+                // Simple bounding box check first
                 if (
                     p.x >= colTransform.position.x &&
                     p.x <= colTransform.position.x + colTransform.size.x &&
@@ -57,7 +82,7 @@ export default class PhysicalParticle extends Particle {
                     
                     if (p.y > rampSurfaceY) {
                         p.y = rampSurfaceY;
-                        v.y *= -this.bounciness * 0.5; // Less bounce on ramps
+                        v.y *= -this.bounciness * 0.5;
                         v.x *= this.friction;
                         onSurface = true;
                     }
@@ -65,7 +90,7 @@ export default class PhysicalParticle extends Particle {
             }
         }
         
-        // If on a surface and moving slowly, come to a rest.
+        // If on a surface and moving slowly, come to a rest
         if (onSurface && Math.abs(v.y) < 5) {
             v.y = 0;
             this.acceleration.y = 0;
