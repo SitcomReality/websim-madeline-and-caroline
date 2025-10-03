@@ -1,6 +1,7 @@
 import Scene from './Scene.js';
 import PhysicsSystem from '../systems/PhysicsSystem.js';
 import Renderer from '../systems/Renderer.js';
+import ParticleSystem from '../systems/ParticleSystem.js';
 import { createPlayer } from '../entities/Player.js';
 import { createPlatform } from '../entities/Platform.js';
 import { createFire } from '../entities/Fire.js';
@@ -13,6 +14,7 @@ export default class GameScene extends Scene {
     init(params = {}) {
         this.physicsSystem = new PhysicsSystem();
         this.renderer = new Renderer();
+        this.particleSystem = new ParticleSystem();
         this.level = params.level || null;
         this.menu = new InGameMenu(this.game, document.getElementById('menu-button'));
         this.menu.showButton();
@@ -47,6 +49,7 @@ export default class GameScene extends Scene {
     update(deltaTime) {
         super.update(deltaTime); // Updates all game objects
         this.physicsSystem.update(this.gameObjects, deltaTime);
+        this.particleSystem.update(deltaTime, this.gameObjects);
     }
 
     draw(ctx) {
@@ -54,6 +57,7 @@ export default class GameScene extends Scene {
         ctx.fillStyle = bg;
         ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         this.renderer.draw(this.gameObjects, ctx);
+        this.particleSystem.draw(ctx);
     }
 
     destroy() {

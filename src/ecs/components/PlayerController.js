@@ -120,6 +120,9 @@ export default class PlayerController extends Component {
             this.movementState.isJumping = true;
             this.movementState.jumpHoldTimer = MOVEMENT.MAX_JUMP_HOLD_TIME;
             this.movementState.setState(MOVEMENT_STATES.JUMPING);
+
+            // Emit jump particles
+            this.emitJumpParticles();
         }
         
         // Variable jump height
@@ -157,6 +160,20 @@ export default class PlayerController extends Component {
         if (physics.onGround && this.movementState.previousState !== MOVEMENT_STATES.IDLE && this.movementState.previousState !== MOVEMENT_STATES.RUNNING) {
             this.movementState.isJumping = false;
         }
+    }
+    
+    emitJumpParticles() {
+        const particleSystem = this.gameObject.scene?.particleSystem;
+        if (!particleSystem) return;
+
+        const transform = this.gameObject.transform;
+        const x = transform.position.x + transform.size.x / 2;
+        const y = transform.position.y + transform.size.y;
+
+        particleSystem.emit('jump_dust', {
+            x: x,
+            y: y
+        });
     }
     
     updateDashing(deltaTime, physics) {

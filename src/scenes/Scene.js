@@ -2,6 +2,7 @@ export default class Scene {
     constructor(game) {
         this.game = game;
         this.gameObjects = [];
+        this.particleSystem = null;
     }
 
     addGameObject(gameObject) {
