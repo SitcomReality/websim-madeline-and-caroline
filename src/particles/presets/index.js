@@ -118,17 +118,33 @@ export function registerDefaultEmitters(registry) {
         startColor: [255, 180, 50, 1],
         endColor: [255, 80, 0, 0],
     }));
+    
+    // Rising embers: warm, slowly rising aesthetic particles that fade out
+    registry.register('rising_embers', new ParticleEmitter(m, AestheticParticle, {
+        count: 6,
+        lifetime: { min: 1.0, max: 2.5 },
+        speed: { min: 10, max: 40 },
+        angle: { min: -110, max: -70 }, // upwards
+        startSize: { min: 2, max: 6 },
+        endSize: 0,
+        startColor: [255, 160, 60, 0.9],
+        endColor: [255, 120, 30, 0],
+        ay: -60 // gentle upward acceleration (negative to rise)
+    }));
 
-    registry.register('smoke', new ParticleEmitter(m, AestheticParticle, {
-        count: 1,
-        lifetime: { min: 1.5, max: 3.0 },
-        speed: { min: 10, max: 30 },
-        angle: { min: -100, max: -80 },
-        startSize: { min: 5, max: 10 },
-        endSize: { min: 15, max: 25 },
-        startColor: [50, 50, 50, 0.7],
-        endColor: [50, 50, 50, 0],
-        ay: -20
+    // Gentle rain: many small physical droplets falling with gravity and slight bounce
+    registry.register('gentle_rain', new ParticleEmitter(m, PhysicalParticle, {
+        count: 20,
+        lifetime: { min: 0.8, max: 1.8 },
+        speed: { min: 120, max: 200 },
+        angle: { min: 85, max: 95 }, // mostly downward
+        startSize: { min: 1, max: 2 },
+        endSize: 1,
+        startColor: [160, 200, 255, 0.9],
+        endColor: [160, 200, 255, 0.6],
+        bounciness: 0.15,
+        friction: 0.98,
+        ay: 800
     }));
 
     registry.register('player_death_burst', new ParticleEmitter(m, AestheticParticle, {
