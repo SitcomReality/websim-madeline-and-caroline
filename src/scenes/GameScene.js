@@ -120,7 +120,11 @@ export default class GameScene extends Scene {
         if (!this.ended && this.playerRef?.transform) {
             const t = this.playerRef.transform;
             const w = this.camera.worldBounds.x, h = this.camera.worldBounds.y;
-            if (t.position.x < 0 || t.position.y < 0 || (t.position.x + t.size.x) > w || (t.position.y + t.size.y) > h) {
+            const leniency = 20; // one cell margin before instant death
+            if (t.position.x < -leniency ||
+                t.position.y < -leniency ||
+                (t.position.x + t.size.x) > (w + leniency) ||
+                (t.position.y + t.size.y) > (h + leniency)) {
                 this.onPlayerDeath();
             }
         }
