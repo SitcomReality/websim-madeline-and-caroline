@@ -1,6 +1,6 @@
 import GameObject from 'game/ecs/GameObject';
 import Transform from 'game/ecs/components/Transform';
-import EmitterController from 'game/ecs/components/EmitterController.js';
+import EmitterController from 'game/ecs/components/EmitterController';
 
 export function createParticleEmitterObject(x, y, config) {
     const emitter = new GameObject('ParticleEmitterObject');
@@ -8,4 +8,3 @@ export function createParticleEmitterObject(x, y, config) {
     emitter.addComponent(new EmitterController(config));
     return emitter;
 }
-
