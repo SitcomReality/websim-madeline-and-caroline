@@ -3,6 +3,8 @@ import PhysicsSystem from 'game/systems/PhysicsSystem';
 import Renderer from 'game/systems/Renderer';
 import { createPlayer } from 'game/entities/Player';
 import { createPlatform } from 'game/entities/Platform';
+import { createFire } from 'game/entities/Fire';
+import { createFuelCan } from 'game/entities/FuelCan';
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from 'game/config/constants';
 import EditorScene from 'game/scenes/EditorScene';
 import InGameMenu from 'game/ui/InGameMenu';
@@ -34,6 +36,12 @@ export default class GameScene extends Scene {
             this.addGameObject(platform1);
             this.addGameObject(platform2);
         }
+
+        // Add some fuel cans for pyromania gameplay
+        const fuel1 = createFuelCan(200, 400);
+        const fuel2 = createFuelCan(600, 300);
+        this.addGameObject(fuel1);
+        this.addGameObject(fuel2);
     }
 
     update(deltaTime) {

@@ -5,7 +5,9 @@ export default class Toolbar {
         this.tools = [
             { name: 'platform', label: 'Platform', icon: '▭' },
             { name: 'select', label: 'Select', icon: '⌖' },
-            { name: 'delete', label: 'Delete', icon: '✕' }
+            { name: 'delete', label: 'Delete', icon: '✕' },
+            { name: 'fire', label: 'Fire', icon: '🔥' },
+            { name: 'fuel', label: 'Fuel', icon: '⛽' }
         ];
     }
 

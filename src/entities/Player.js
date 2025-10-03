@@ -3,7 +3,7 @@ import Transform from 'game/ecs/components/Transform';
 import Physics from 'game/ecs/components/Physics';
 import SpriteRenderer from 'game/ecs/components/SpriteRenderer';
 import PlayerController from 'game/ecs/components/PlayerController';
-import { GRAVITY } from 'game/config/constants';
+import { GRAVITY, FIRE_DAMAGE } from 'game/config/constants';
 
 export function createPlayer(x, y) {
     const player = new GameObject('Player');
@@ -16,7 +16,13 @@ export function createPlayer(x, y) {
 
     player.addComponent(new SpriteRenderer('#ff47ab'));
     player.addComponent(new PlayerController());
-
+    
+    // Add fire immunity for pyromania gameplay
+    const physics = player.getComponent('Physics');
+    if (physics) {
+        physics.fireImmune = false;
+        physics.fireImmunityTimer = 0;
+    }
+    
     return player;
 }
-
