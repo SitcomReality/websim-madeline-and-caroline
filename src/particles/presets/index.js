@@ -147,6 +147,33 @@ export function registerDefaultEmitters(registry) {
         ay: 800
     }));
 
+    // Celebration sparkle: short burst of colorful, fast aesthetic sparks (good for exits)
+    registry.register('celebration_sparkle', new ParticleEmitter(m, AestheticParticle, {
+        count: 40,
+        lifetime: { min: 0.6, max: 1.2 },
+        speed: { min: 120, max: 320 },
+        angle: { min: -120, max: -60 },
+        startSize: { min: 2, max: 5 },
+        endSize: 0,
+        // multispectral confetti-like colors (will be overridden if emitter provides color)
+        startColor: [255, 64, 64, 1],
+        endColor: [255, 64, 64, 0],
+    }));
+
+    // Ethereal glow: slow, large soft particles that drift and fade for ambient zones
+    registry.register('ethereal_glow', new ParticleEmitter(m, AestheticParticle, {
+        count: 6,
+        lifetime: { min: 2.0, max: 4.0 },
+        speed: { min: 5, max: 30 },
+        angle: { min: 0, max: 360 },
+        startSize: { min: 8, max: 18 },
+        endSize: 0,
+        startColor: [128, 0, 255, 0.6],
+        endColor: [128, 0, 255, 0],
+        ax: 0,
+        ay: -10 // subtle upward drift
+    }));
+
     registry.register('player_death_burst', new ParticleEmitter(m, AestheticParticle, {
         count: 180,
         angle: { min: 0, max: 360 },
