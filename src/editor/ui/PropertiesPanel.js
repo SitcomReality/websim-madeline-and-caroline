@@ -28,10 +28,10 @@ export default class PropertiesPanel extends UIComponent {
 
     renderEntityProperties(entity) {
         const properties = [
-            { label: 'X Position', key: 'x', type: 'number' },
-            { label: 'Y Position', key: 'y', type: 'number' },
-            { label: 'Width', key: 'width', type: 'number' },
-            { label: 'Height', key: 'height', type: 'number' },
+            { label: 'X', key: 'x', type: 'number', compactGroup: 'pos' },
+            { label: 'Y', key: 'y', type: 'number', compactGroup: 'pos' },
+            { label: 'W', key: 'width', type: 'number', compactGroup: 'size' },
+            { label: 'H', key: 'height', type: 'number', compactGroup: 'size' },
             { label: 'Color', key: 'color', type: 'color' }
         ];
 
@@ -58,55 +58,42 @@ export default class PropertiesPanel extends UIComponent {
             properties.push({ label: 'Angle', key: 'angle', type: 'number', step: 1 });
         }
 
-        properties.forEach(prop => {
-            const div = document.createElement('div');
-            div.className = 'editor-property';
+        // Render compact grouped fields for position and size first
+        const posRow = document.createElement('div');
+        posRow.className = 'editor-property-row';
+        ['x','y'].forEach(k => {
+            const wrapper = document.createElement('div'); wrapper.className = 'editor-property compact';
+            const label = document.createElement('label'); label.className = 'small-label'; label.textContent = k.toUpperCase();
+            const input = document.createElement('input'); input.type = 'number'; input.value = entity[k] !== undefined ? entity[k] : 0;
+            input.onchange = (e) => this.updateEntityProperty(entity, k, parseFloat(e.target.value));
+            wrapper.appendChild(label); wrapper.appendChild(input); posRow.appendChild(wrapper);
+        });
+        this.element.appendChild(posRow);
 
-            const label = document.createElement('label');
-            label.textContent = prop.label;
-            div.appendChild(label);
+        const sizeRow = document.createElement('div');
+        sizeRow.className = 'editor-property-row';
+        ['width','height'].forEach(k => {
+            const wrapper = document.createElement('div'); wrapper.className = 'editor-property compact';
+            const label = document.createElement('label'); label.className = 'small-label'; label.textContent = k === 'width' ? 'W' : 'H';
+            const input = document.createElement('input'); input.type = 'number'; input.value = entity[k] !== undefined ? entity[k] : 0;
+            input.onchange = (e) => this.updateEntityProperty(entity, k, parseFloat(e.target.value));
+            wrapper.appendChild(label); wrapper.appendChild(input); sizeRow.appendChild(wrapper);
+        });
+        this.element.appendChild(sizeRow);
 
-            if (prop.type === 'select') {
-                const select = document.createElement('select');
-                prop.options.forEach(opt => {
-                    const option = document.createElement('option');
-                    option.value = opt;
-                    option.textContent = opt;
-                    select.appendChild(option);
-                });
-                select.value = entity[prop.key] || prop.options[0];
-                select.onchange = (e) => this.updateEntityProperty(entity, prop.key, e.target.value);
-                div.appendChild(select);
-            } else if (prop.type === 'checkbox') {
-                const input = document.createElement('input');
-                input.type = 'checkbox';
-                input.checked = entity[prop.key] || false;
-                input.onchange = (e) => this.updateEntityProperty(entity, prop.key, e.target.checked);
-                div.appendChild(input);
-            } else {
-                const input = document.createElement('input');
-                input.type = prop.type;
-                if (prop.step) input.step = prop.step;
-                input.value = entity[prop.key] !== undefined ? entity[prop.key] : (prop.type === 'number' ? 0 : '');
-                input.onchange = (e) => {
-                    let value = e.target.value;
-                    if (prop.type === 'number') {
-                        value = parseFloat(e.target.value);
-                    } else if (prop.type === 'color') {
-                        setRecentColor(value);
-                    }
-                    this.updateEntityProperty(entity, prop.key, value);
-                };
-                div.appendChild(input);
-
-                if (prop.type === 'color') {
-                    div.appendChild(createRecentColors(color => {
-                        input.value = color;
-                        this.updateEntityProperty(entity, prop.key, color);
-                    }));
-                }
-            }
-
+        // Render remaining properties (skip x,y,width,height already rendered)
+        const remaining = [{ label: 'Color', key: 'color', type: 'color' }];
+        remaining.forEach(prop => {
+            const div = document.createElement('div'); div.className = 'editor-property';
+            const label = document.createElement('label'); label.textContent = prop.label; div.appendChild(label);
+            const input = document.createElement('input'); input.type = prop.type; input.value = entity[prop.key] || '';
+            input.onchange = (e) => {
+                let value = e.target.value;
+                if (prop.type === 'color') setRecentColor(value);
+                this.updateEntityProperty(entity, prop.key, value);
+            };
+            div.appendChild(input);
+            if (prop.type === 'color') div.appendChild(createRecentColors(color => { input.value = color; this.updateEntityProperty(entity, prop.key, color); }));
             this.element.appendChild(div);
         });
         
