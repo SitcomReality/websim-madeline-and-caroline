@@ -14,7 +14,7 @@ export default class GameObject {
     }
 
     getComponent(componentClass) {
-        return this.components.find(c => c instanceof componentClass);
+        return this.components.find(c => c.constructor.name === componentClass.name);
     }
 
     update(deltaTime) {
@@ -33,4 +33,3 @@ export default class GameObject {
         }
     }
 }
-
