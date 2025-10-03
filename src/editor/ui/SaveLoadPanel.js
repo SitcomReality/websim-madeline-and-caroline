@@ -22,6 +22,30 @@ export default class SaveLoadPanel extends UIComponent {
         this.createModal('load');
     }
 
+    showExport() {
+        const state = this.editorUI.editorManager.state;
+        const levelName = state.levelSettings.name || 'untitled';
+        this.exportLevel(levelName);
+    }
+
+    exportLevel(name) {
+        const state = this.editorUI.editorManager.state;
+        const data = this.serializer.serialize(state);
+        
+        const blob = new Blob([data], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        // Use a safe filename, replacing spaces with underscores
+        a.download = `${name.replace(/\s+/g, '_')}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        URL.revokeObjectURL(url);
+    }
+
     createModal(mode) {
         if (this.element) {
             this.element.remove();

@@ -19,6 +19,7 @@ export default class BottomBar extends UIComponent {
         const clearBtn = this.createButton('Clear All', () => this.clearLevel());
         const saveBtn = this.createButton('Save', () => this.editorUI.saveLoadPanel.showSave());
         const loadBtn = this.createButton('Load', () => this.editorUI.saveLoadPanel.showLoad());
+        const exportBtn = this.createButton('Export', () => this.editorUI.saveLoadPanel.showExport());
         const exitBtn = this.createButton('Exit Editor', () => this.exitEditor());
 
         actions.appendChild(this.undoBtn);
@@ -26,6 +27,7 @@ export default class BottomBar extends UIComponent {
         actions.appendChild(clearBtn);
         actions.appendChild(saveBtn);
         actions.appendChild(loadBtn);
+        actions.appendChild(exportBtn);
         actions.appendChild(exitBtn);
 
         const info = document.createElement('div');
