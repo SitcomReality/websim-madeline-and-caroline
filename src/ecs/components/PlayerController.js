@@ -2,7 +2,6 @@ import Component from './Component.js';
 import InputManager from '../../core/InputManager.js';
 import InputBuffer from '../../systems/InputBuffer.js';
 import MovementState, { MOVEMENT_STATES } from './MovementState.js';
-import { MOVEMENT } from '../../config/movementConstants.js';
 import { GRAVITY } from '../../config/constants.js';
 import { createFire } from '../../entities/Fire.js';
 import { createFuelCan } from '../../entities/FuelCan.js';
@@ -13,16 +12,13 @@ export default class PlayerController extends Component {
         this.hasLighter = true;
         this.canIgnite = true;
         this.movementState = null;
+        this.characterController = null;
     }
     
     init() {
-        // Add MovementState component if not present
-        if (!this.gameObject.getComponent('MovementState')) {
-            this.movementState = new MovementState();
-            this.gameObject.addComponent(this.movementState);
-        } else {
-            this.movementState = this.gameObject.getComponent('MovementState');
-        }
+        // Get other components
+        this.movementState = this.gameObject.getComponent('MovementState') || this.gameObject.addComponent(new MovementState());
+        this.characterController = this.gameObject.getComponent('CharacterController');
         
         // Register double-tap callbacks
         InputBuffer.registerDoubleTap('KeyA', () => this.dash(-1, 0));
@@ -39,7 +35,7 @@ export default class PlayerController extends Component {
         const physics = this.gameObject.getComponent('Physics');
         if (!physics) return;
         
-        if (!this.movementState) {
+        if (!this.movementState || !this.characterController) {
             this.init();
         }
         
@@ -66,6 +62,8 @@ export default class PlayerController extends Component {
     updateNormalMovement(deltaTime, physics) {
         // Reset acceleration each frame
         physics.acceleration.set(0, 0);
+
+        const MOVEMENT = this.characterController.getMovementStats();
         
         // Check if sliding
         const isPressingDown = InputManager.isKeyPressed('KeyS') || InputManager.isKeyPressed('ArrowDown');
@@ -172,11 +170,12 @@ export default class PlayerController extends Component {
 
         particleSystem.emit('jump_dust', {
             x: x,
-            y: y
+            y: y,
         });
     }
     
     updateDashing(deltaTime, physics) {
+        const MOVEMENT = this.characterController.getMovementStats();
         this.movementState.dashTimer += deltaTime;
         
         if (this.movementState.dashTimer >= MOVEMENT.DASH_DURATION) {
@@ -198,6 +197,8 @@ export default class PlayerController extends Component {
         
         const physics = this.gameObject.getComponent('Physics');
         if (!physics) return;
+
+        const MOVEMENT = this.characterController.getMovementStats();
         
         // Normalize direction
         const magnitude = Math.sqrt(dirX * dirX + dirY * dirY);
@@ -210,6 +211,19 @@ export default class PlayerController extends Component {
         
         this.movementState.startDash(normalizedDir);
         this.movementState.dashTimer = 0;
+
+        // Emit dash particles
+        const particleSystem = this.gameObject.scene?.particleSystem;
+        const particleConfig = this.characterController.getParticleConfig();
+        if (particleSystem && particleConfig.dash) {
+            const transform = this.gameObject.transform;
+            const angle = Math.atan2(dirY, dirX) * 180 / Math.PI;
+            particleSystem.emit(particleConfig.dash, {
+                x: transform.position.x + transform.size.x / 2,
+                y: transform.position.y + transform.size.y / 2,
+                angle: { min: angle + 170, max: angle + 190 }
+            });
+        }
     }
     
     ignite() {

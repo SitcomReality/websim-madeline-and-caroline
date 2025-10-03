@@ -7,8 +7,8 @@ import { createPlatform } from '../entities/Platform.js';
 import { createFire } from '../entities/Fire.js';
 import { createFuelCan } from '../entities/FuelCan.js';
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../config/constants.js';
-import EditorScene from './EditorScene.js';
 import InGameMenu from '../ui/InGameMenu.js';
+import CharacterDisplay from '../ui/CharacterDisplay.js';
 
 export default class GameScene extends Scene {
     init(params = {}) {
@@ -16,11 +16,17 @@ export default class GameScene extends Scene {
         this.renderer = new Renderer();
         this.particleSystem = new ParticleSystem();
         this.level = params.level || null;
+
+        const uiContainer = document.getElementById('game-ui');
         this.menu = new InGameMenu(this.game, document.getElementById('menu-button'));
         this.menu.showButton();
 
         const player = createPlayer(100, 100);
         this.addGameObject(player);
+        const characterController = player.getComponent('CharacterController');
+        this.characterDisplay = new CharacterDisplay(characterController);
+        this.characterDisplay.init(uiContainer);
+        
         if (this.level?.settings?.gravity != null) {
             const phys = player.getComponent('Physics');
             if (phys) phys.gravity = this.level.settings.gravity;
@@ -62,6 +68,7 @@ export default class GameScene extends Scene {
 
     destroy() {
         if (this.menu) this.menu.destroy();
+        if (this.characterDisplay) this.characterDisplay.destroy();
         super.destroy();
     }
 }

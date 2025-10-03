@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Madeline & Caroline in: Gasoline Discipline Decline</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles/main.css">
+    <title>Madeline & Caroline in: Masculine Gasoline Trampoline Discipline Decline</title>
+    <link rel="stylesheet" href="style.css">
     <script type="importmap">
     {
         "imports": {
@@ -18,8 +15,6 @@
             "game/core/Game": "./src/core/Game.js",
             "game/core/GameLoop": "./src/core/GameLoop.js",
             "game/core/InputManager": "./src/core/InputManager.js",
-            "game/core/Camera": "./src/core/Camera.js",
-            "game/core/ParallaxBackground": "./src/core/ParallaxBackground.js",
             "game/ecs/GameObject": "./src/ecs/GameObject.js",
             "game/ecs/components/Component": "./src/ecs/components/Component.js",
             "game/ecs/components/Transform": "./src/ecs/components/Transform.js",
@@ -39,7 +34,6 @@
             "game/systems/PhysicsSystem": "./src/systems/PhysicsSystem.js",
             "game/systems/InputBuffer": "./src/systems/InputBuffer.js",
             "game/systems/ParticleSystem": "./src/systems/ParticleSystem.js",
-            "game/core/ParallaxBackground": "./src/core/ParallaxBackground.js",
             "game/particles/ParticleManager": "./src/particles/ParticleManager.js",
             "game/particles/ParticleEmitter": "./src/particles/ParticleEmitter.js",
             "game/particles/Particle": "./src/particles/Particle.js",
@@ -61,27 +55,7 @@
             "game/editor/serialization/LevelSerializer": "./src/editor/serialization/LevelSerializer.js",
             "game/editor/serialization/LocalStorageManager": "./src/editor/serialization/LocalStorageManager.js",
             "game/ui/InGameMenu": "./src/ui/InGameMenu.js",
-            "game/ui/CharacterDisplay": "./src/ui/CharacterDisplay.js",
-            "game/ui/GasolineMeter": "./src/ui/GasolineMeter.js",
-            "game/ecs/components/player/FuelController": "./src/ecs/components/player/FuelController.js",
-            "game/ui/Minimap": "./src/ui/Minimap.js",
-            "game/editor/ui/EditorMinimap": "./src/editor/ui/EditorMinimap.js",
-            "game/ecs/components/FireController": "./src/ecs/components/FireController.js",
-            "game/entities/Fire": "./src/entities/Fire.js",
-            "game/entities/FuelCan": "./src/entities/FuelCan.js",
-            "game/editor/tools/FuelTool": "./src/editor/tools/FuelTool.js",
-            "game/entities/Ramp": "./src/entities/Ramp.js",
-            "game/entities/Enemy": "./src/entities/Enemy.js",
-            "game/entities/EnemySpawner": "./src/entities/EnemySpawner.js",
-            "game/editor/tools/EnemySpawnerTool": "./src/editor/tools/EnemySpawnerTool.js",
-            "game/entities/ExitDoor": "./src/entities/ExitDoor.js",
-            "game/editor/tools/ExitDoorTool": "./src/editor/tools/ExitDoorTool.js",
-            "game/editor/tools/PlayerStartTool": "./src/editor/tools/PlayerStartTool.js",
-            "game/entities/ParticleEmitterObject": "./src/entities/ParticleEmitterObject.js",
-            "game/editor/tools/ParticleEmitterTool": "./src/editor/tools/ParticleEmitterTool.js",
-            "game/ecs/components/EmitterController": "./src/ecs/components/EmitterController.js",
-            "game/utils/ui": "./src/utils/ui.js",
-            "game/utils/levelLoader": "./src/utils/levelLoader.js"
+            "game/ui/CharacterDisplay": "./src/ui/CharacterDisplay.js"
         }
     }
     </script>
@@ -96,19 +70,21 @@
             <h1>Madeline & Caroline</h1>
             <h2>in:</h2>
             <h3>Gasoline Discipline Decline</h3>
-            <button id="map-editor-btn" class="splash-button">Map Editor</button>
-            <button id="load-map-btn" class="splash-button">Play</button>
+            <button id="start-game-btn">New Game</button>
+            <button id="map-editor-btn">Map Editor</button>
+            <button id="load-map-btn">Load Saved Map</button>
         </div>
         <div id="editor-ui" class="hidden"></div>
     </div>
-    <script type="module">
-        import Game from './src/core/Game.js';
-
-        const game = new Game();
-
-        window.addEventListener('load', () => {
-            // Start the game once the page has loaded and DOM elements exist
-            game.start();
+    <script type="module" src="main.js"></script>
+    <script>
+        // Add start button click handler
+        document.addEventListener('DOMContentLoaded', () => {
+            const startBtn = document.getElementById('start-game-btn');
+            startBtn.addEventListener('click', () => {
+                const splash = document.getElementById('splash-screen');
+                splash.classList.add('hidden');
+            });
         });
     </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
