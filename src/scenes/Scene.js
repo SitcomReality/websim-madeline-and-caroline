@@ -22,6 +22,7 @@ export default class Scene {
         }
     }
 
-    destroy() {}
+    destroy() {
+        this.gameObjects = [];
+    }
 }
-
