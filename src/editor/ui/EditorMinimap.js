@@ -16,9 +16,12 @@ export default class EditorMinimap extends UIComponent {
 
     init() {
         this.createElement('div', 'minimap', document.getElementById('editor-ui'));
+        // Constrain the wrapper height so it doesn't stretch the entire page
         this.element.style.right = '20px';
         this.element.style.top = '20px';
         this.element.style.bottom = '';
+        this.element.style.display = 'inline-block';
+        this.element.style.height = `${this.height + 36}px`; // header + canvas padding
         
         this.header = document.createElement('div');
         this.header.className = 'minimap-header';
@@ -106,4 +109,3 @@ export default class EditorMinimap extends UIComponent {
         ctx.strokeRect(vx, vy, vw, vh);
     }
 }
-
