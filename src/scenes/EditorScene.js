@@ -6,7 +6,7 @@ import EditorMinimap from 'game/editor/ui/EditorMinimap';
 import ParticleSystem from '../systems/ParticleSystem.js';
 
 export default class EditorScene extends Scene {
-    init() {
+    init(params = {}) {
         // Editor levels are larger by default for design space
         const worldWidth = SCREEN_WIDTH * 3;
         const worldHeight = SCREEN_HEIGHT * 3;
@@ -14,6 +14,10 @@ export default class EditorScene extends Scene {
 
         this.editorManager = new EditorManager(this.game, this);
         this.editorManager.init();
+        if (params.level) {
+            this.editorManager.state.fromJSON(params.level);
+            this.editorManager.ui.updateProperties();
+        }
         this.editorMinimap = new EditorMinimap(this);
         this.editorMinimap.init();
         // Particle preview in editor

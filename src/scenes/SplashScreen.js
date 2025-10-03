@@ -63,7 +63,11 @@ export default class SplashScreen extends Scene {
                 const del = document.createElement('button');
                 del.textContent = '✕';
                 del.onclick = (e) => { e.stopPropagation(); if (confirm(`Delete "${name}"?`)) { this.storage.deleteLevel(name); this.openLoadModal(); } };
+                const edit = document.createElement('button');
+                edit.textContent = 'Edit';
+                edit.onclick = (e) => { e.stopPropagation(); this.loadLevelAndEdit(name); };
                 item.appendChild(span);
+                item.appendChild(edit);
                 item.appendChild(del);
                 list.appendChild(item);
             });
@@ -92,5 +96,19 @@ export default class SplashScreen extends Scene {
     startGameWithLevel(levelState) {
         this.splashElement.classList.add('hidden');
         this.game.sceneManager.changeScene('game', { level: levelState });
+    }
+
+    loadLevelAndEdit(name) {
+        const data = this.storage.loadLevel(name);
+        if (!data) return;
+        const state = this.serializer.deserialize(data);
+        if (!state) return;
+        if (this.modalEl) { this.modalEl.remove(); this.modalEl = null; }
+        this.startEditorWithLevel(state);
+    }
+
+    startEditorWithLevel(levelState) {
+        this.splashElement.classList.add('hidden');
+        this.game.sceneManager.changeScene('editor', { level: levelState });
     }
 }
