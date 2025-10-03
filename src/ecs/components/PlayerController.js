@@ -1,6 +1,8 @@
-import Component from 'game/ecs/components/Component';
-import InputManager from 'game/core/InputManager';
-import { PLAYER_SPEED, PLAYER_JUMP_FORCE } from 'game/config/constants';
+import Component from './Component.js';
+import InputManager from '../../core/InputManager.js';
+import { PLAYER_SPEED, PLAYER_JUMP_FORCE } from '../../config/constants.js';
+import { createFire } from '../../entities/Fire.js';
+import { createFuelCan } from '../../entities/FuelCan.js';
 
 export default class PlayerController extends Component {
     constructor() {

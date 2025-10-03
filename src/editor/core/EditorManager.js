@@ -3,7 +3,7 @@ import EditorState from 'game/editor/core/EditorState';
 import PlatformTool from 'game/editor/tools/PlatformTool';
 import SelectTool from 'game/editor/tools/SelectTool';
 import DeleteTool from 'game/editor/tools/DeleteTool';
-import InputManager from 'game/core/InputManager';
+import InputManager from '../../core/InputManager.js';
 
 export default class EditorManager {
     constructor(game) {

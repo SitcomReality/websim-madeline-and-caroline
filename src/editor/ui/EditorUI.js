@@ -1,7 +1,7 @@
-import Toolbar from 'game/editor/ui/Toolbar';
-import PropertiesPanel from 'game/editor/ui/PropertiesPanel';
-import BottomBar from 'game/editor/ui/BottomBar';
-import SaveLoadPanel from 'game/editor/ui/SaveLoadPanel';
+import Toolbar from './Toolbar.js';
+import PropertiesPanel from './PropertiesPanel.js';
+import BottomBar from './BottomBar.js';
+import SaveLoadPanel from './SaveLoadPanel.js';
 
 export default class EditorUI {
     constructor(editorManager) {
@@ -38,4 +38,3 @@ export default class EditorUI {
         this.container.innerHTML = '';
     }
 }
-

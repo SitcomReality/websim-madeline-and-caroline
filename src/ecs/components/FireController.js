@@ -1,5 +1,6 @@
-import Component from 'game/ecs/components/Component';
-import { FIRE_SPREAD_RATE, FIRE_DAMAGE } from 'game/config/constants';
+import Component from './Component.js';
+import { FIRE_SPREAD_RATE, FIRE_DAMAGE } from '../../config/constants.js';
+import { createFire } from '../../entities/Fire.js';
 
 export default class FireController extends Component {
     constructor() {

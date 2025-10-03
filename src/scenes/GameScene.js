@@ -1,13 +1,13 @@
-import Scene from 'game/scenes/Scene';
-import PhysicsSystem from 'game/systems/PhysicsSystem';
-import Renderer from 'game/systems/Renderer';
-import { createPlayer } from 'game/entities/Player';
-import { createPlatform } from 'game/entities/Platform';
-import { createFire } from 'game/entities/Fire';
-import { createFuelCan } from 'game/entities/FuelCan';
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from 'game/config/constants';
-import EditorScene from 'game/scenes/EditorScene';
-import InGameMenu from 'game/ui/InGameMenu';
+import Scene from './Scene.js';
+import PhysicsSystem from '../systems/PhysicsSystem.js';
+import Renderer from '../systems/Renderer.js';
+import { createPlayer } from '../entities/Player.js';
+import { createPlatform } from '../entities/Platform.js';
+import { createFire } from '../entities/Fire.js';
+import { createFuelCan } from '../entities/FuelCan.js';
+import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../config/constants.js';
+import EditorScene from './EditorScene.js';
+import InGameMenu from '../ui/InGameMenu.js';
 
 export default class GameScene extends Scene {
     init(params = {}) {
