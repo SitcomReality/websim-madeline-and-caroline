@@ -74,7 +74,8 @@ export default class GameScene extends Scene {
             this.level.entities.forEach(e => {
                 switch (e.type) {
                     case 'platform': {
-                        const platform = createPlatform(e.x, e.y, e.width, e.height);
+                        // Respect color from level JSON / editor entity
+                        const platform = createPlatform(e.x, e.y, e.width, e.height, e.color || '#47ffff');
                         if (e.killsPlayer) {
                             platform.killsPlayer = true;
                             // Make deadly platforms visually distinct
