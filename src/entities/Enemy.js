@@ -23,7 +23,7 @@ class EnemyController {
     }
 }
 
-export function createEnemy(x, y) {
+export function createEnemy(x, y, type = 'basic') {
     const enemy = new GameObject('Enemy');
     enemy.addComponent(new Transform(x, y, 32, 32));
     
@@ -31,9 +31,10 @@ export function createEnemy(x, y) {
     physics.gravity = GRAVITY;
     enemy.addComponent(physics);
 
-    enemy.addComponent(new SpriteRenderer('#ff00ff'));
+    // Set color by enemy type (basic = red)
+    const color = type === 'basic' ? '#ff4747' : '#ff00ff';
+    enemy.addComponent(new SpriteRenderer(color));
     enemy.addComponent(new EnemyController());
 
     return enemy;
 }
-

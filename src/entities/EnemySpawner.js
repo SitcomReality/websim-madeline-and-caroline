@@ -21,7 +21,7 @@ class SpawnerController {
     spawn() {
         const { x, y } = this.gameObject.transform.position;
         // Logic to spawn different enemy types can go here
-        const enemy = createEnemy(x, y);
+        const enemy = createEnemy(x, y, this.enemyType);
         this.scene.addGameObject(enemy);
         console.log(`Spawned ${this.enemyType} at ${x}, ${y}`);
     }
