@@ -2,6 +2,7 @@ import Scene from 'game/scenes/Scene';
 import EditorManager from 'game/editor/core/EditorManager';
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from 'game/config/constants';
 import Camera from '../core/Camera.js';
+import EditorMinimap from 'game/editor/ui/EditorMinimap';
 
 export default class EditorScene extends Scene {
     init() {
@@ -12,10 +13,12 @@ export default class EditorScene extends Scene {
 
         this.editorManager = new EditorManager(this.game, this);
         this.editorManager.init();
+        this.editorMinimap = new EditorMinimap(this);
     }
 
     update(deltaTime) {
         this.editorManager.update(deltaTime);
+        this.editorMinimap?.render();
     }
 
     draw(ctx) {
@@ -63,5 +66,6 @@ export default class EditorScene extends Scene {
         if (this.editorManager) {
             this.editorManager.destroy();
         }
+        if (this.editorMinimap) this.editorMinimap.destroy();
     }
 }

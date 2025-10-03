@@ -1,0 +1,37 @@
+.minimap {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(20, 20, 30, 0.85);
+    border: 2px solid var(--text-primary);
+    padding: 8px;
+    pointer-events: auto;
+    z-index: 16;
+}
+
+.minimap.hidden { display: none; }
+
+.minimap canvas {
+    display: block;
+    background: #0a0a0a;
+}
+
+.minimap .minimap-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+}
+
+.minimap .mini-toggle {
+    background: #2a2a3a;
+    color: var(--text-primary);
+    border: 1px solid var(--color-secondary);
+    padding: 2px 6px;
+    cursor: pointer;
+    font-size: 11px;
+}
+

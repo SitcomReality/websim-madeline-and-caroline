@@ -4,6 +4,7 @@
 @import url('layout/game-container.css');
 @import url('components/splash-screen.css');
 @import url('components/editor-ui.css');
+@import url('components/minimap.css');
 @import url('components/modals.css');
 @import url('components/ui-elements.css');
 

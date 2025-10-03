@@ -11,6 +11,7 @@ import InGameMenu from '../ui/InGameMenu.js';
 import CharacterDisplay from '../ui/CharacterDisplay.js';
 import GasolineMeter from '../ui/GasolineMeter.js';
 import Camera from '../core/Camera.js';
+import Minimap from 'game/ui/Minimap';
 
 export default class GameScene extends Scene {
     init(params = {}) {
@@ -39,6 +40,10 @@ export default class GameScene extends Scene {
         this.gasolineMeter = new GasolineMeter(fuelController);
         this.gasolineMeter.init(uiContainer);
         
+        // Minimap
+        this.minimap = new Minimap(uiContainer, worldWidth, worldHeight);
+        this.playerRef = player;
+
         if (this.level?.settings?.gravity != null) {
             const phys = player.getComponent('Physics');
             if (phys) phys.gravity = this.level.settings.gravity;
@@ -69,6 +74,9 @@ export default class GameScene extends Scene {
         this.physicsSystem.update(this.gameObjects, deltaTime);
         this.particleSystem.update(deltaTime, this.gameObjects);
         this.camera.update(deltaTime);
+        // Update minimap render
+        const playerColor = this.playerRef?.getComponent('SpriteRenderer')?.color || '#ffffff';
+        this.minimap?.render(this.gameObjects, playerColor);
     }
 
     draw(ctx) {
@@ -90,6 +98,7 @@ export default class GameScene extends Scene {
         if (this.menu) this.menu.destroy();
         if (this.characterDisplay) this.characterDisplay.destroy();
         if (this.gasolineMeter) this.gasolineMeter.destroy();
+        if (this.minimap) this.minimap.destroy();
         super.destroy();
     }
 }
